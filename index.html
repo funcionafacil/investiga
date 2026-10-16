@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taxonomía Emergente e Investigación con IA</title>
+    <!-- Librería para generación de PDF directo desde el cliente -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         /* ====================================================
            VARIABLES Y RESET
@@ -79,10 +81,10 @@
 
         .header p { color: #546E7A; font-size: 1.05rem; font-style: italic; }
 
-        /* CARDS TOGGLE PRINCIPALES Y SUB-CARDS */
+        /* CARDS TOGGLE PRINCIPALES */
         .cards-wrapper { display: flex; flex-direction: column; gap: 20px; }
 
-        .main-card, .sub-card {
+        .main-card {
             background: #ffffff;
             border-radius: var(--radius-card);
             border: 1px solid #CFD8DC;
@@ -93,7 +95,7 @@
 
         .main-card:hover { border-color: #B0BEC5; box-shadow: var(--shadow-hover); }
 
-        .card-header, .sub-card-header {
+        .card-header {
             padding: 22px 28px;
             background: #ffffff;
             color: var(--sena-gris);
@@ -106,13 +108,7 @@
             border-left: 6px solid var(--sena-verde);
         }
 
-        .sub-card-header {
-            padding: 16px 20px;
-            background: #F5F7FA;
-            border-left: 5px solid var(--sena-azul);
-        }
-
-        .card-header:hover, .sub-card-header:hover { background: #ECEFF1; }
+        .card-header:hover { background: #ECEFF1; }
 
         .main-card.active .card-header {
             background: linear-gradient(135deg, var(--sena-verde), #1b5e20);
@@ -120,20 +116,13 @@
             border-left-color: var(--sena-naranja);
         }
 
-        .sub-card.active .sub-card-header {
-            background: linear-gradient(135deg, var(--sena-azul), #0D47A1);
-            color: #ffffff;
-            border-left-color: var(--sena-verde-claro);
-        }
-
         .header-title { display: flex; align-items: center; gap: 14px; font-size: 1.2rem; font-weight: 800; }
-        .sub-header-title { display: flex; align-items: center; gap: 10px; font-size: 1rem; font-weight: 700; }
         .header-title .icon { font-size: 1.5rem; }
         
         .toggle-arrow { font-size: 1rem; transition: transform 0.3s ease; }
-        .main-card.active .toggle-arrow, .sub-card.active .toggle-arrow { transform: rotate(180deg); }
+        .main-card.active .toggle-arrow { transform: rotate(180deg); }
 
-        .card-body, .sub-card-body {
+        .card-body {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
@@ -141,22 +130,141 @@
         }
 
         .main-card.active .card-body {
-            max-height: 18000px;
+            max-height: 25000px;
             transition: max-height 0.6s ease-in-out;
             border-top: 1px solid #ECEFF1;
         }
 
-        .sub-card.active .sub-card-body {
-            max-height: 5000px;
-            transition: max-height 0.5s ease-in-out;
-            border-top: 1px solid #E0E0E0;
-            background: #ffffff;
+        .card-content { padding: 28px; color: #37474F; font-size: 0.98rem; line-height: 1.7; }
+
+        /* ESTILOS DE TOGGLE BUTTONS / TABS */
+        .toggle-btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #CFD8DC;
+            padding-bottom: 10px;
         }
 
-        .card-content { padding: 28px; color: #37474F; font-size: 0.98rem; line-height: 1.7; }
-        .sub-card-content { padding: 20px; }
+        .toggle-tab-btn {
+            background: #ECEFF1;
+            color: var(--sena-gris);
+            border: 2px solid #CFD8DC;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-        /* ELEMENTOS FORMULARIO E INTERACTIVOS */
+        .toggle-tab-btn:hover { background: #CFD8DC; }
+
+        .toggle-tab-btn.active {
+            background: linear-gradient(135deg, var(--sena-azul), #0D47A1);
+            color: #ffffff;
+            border-color: var(--sena-azul);
+            box-shadow: 0 4px 12px rgba(21,101,192,0.3);
+        }
+
+        .toggle-tab-btn.active.green-tab {
+            background: linear-gradient(135deg, var(--sena-verde), #1b5e20);
+            border-color: var(--sena-verde);
+            box-shadow: 0 4px 12px rgba(46,125,50,0.3);
+        }
+
+        .tab-panel {
+            display: none;
+            background: #ffffff;
+            border: 1px solid #CFD8DC;
+            border-radius: var(--radius-card);
+            padding: 22px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .tab-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* WIZARD ASISTENTE DE DECISIÓN METODOLÓGICA */
+        .wizard-container {
+            background: #F4F6F9;
+            border: 2px dashed #B0BEC5;
+            border-radius: var(--radius-card);
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .wizard-steps {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            border-bottom: 1px solid #CFD8DC;
+            padding-bottom: 10px;
+        }
+
+        .wizard-step-item {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #78909C;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .wizard-step-item.active { color: var(--sena-verde); }
+        .wizard-step-item.completed { color: var(--sena-azul); }
+
+        .wizard-options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .wizard-card-btn {
+            background: #ffffff;
+            border: 2px solid #CFD8DC;
+            border-radius: 10px;
+            padding: 14px;
+            cursor: pointer;
+            text-align: left;
+            transition: var(--transition);
+        }
+
+        .wizard-card-btn:hover {
+            border-color: var(--sena-verde);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .wizard-card-btn.blue { border-top: 4px solid var(--sena-azul); }
+        .wizard-card-btn.green { border-top: 4px solid var(--sena-verde); }
+        .wizard-card-btn.purple { border-top: 4px solid var(--nivel5); }
+
+        .wizard-card-btn h5 {
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .wizard-card-btn p { font-size: 0.82rem; color: #546E7A; line-height: 1.4; }
+
+        /* FORMULARIO E INTERACTIVOS */
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--sena-gris); }
         .form-control {
@@ -172,7 +280,12 @@
         .form-control:focus { outline: none; border-color: var(--sena-verde); box-shadow: 0 0 0 3px rgba(46,125,50,0.1); }
         textarea.form-control { min-height: 90px; resize: vertical; }
 
-        /* BOTONERAS */
+        .form-control.input-error {
+            border-color: #C62828 !important;
+            background-color: #FFEBEE !important;
+        }
+
+        /* BOTONERAS ACCIONES */
         .btn-group-custom {
             display: flex;
             flex-wrap: wrap;
@@ -256,7 +369,8 @@
 
         /* IMÁGENES DENTRO DE CARDS */
         .card-media {
-            margin-top: 25px;
+            margin-top: 20px;
+            margin-bottom: 10px;
             text-align: center;
             background: #ffffff;
             padding: 15px;
@@ -345,7 +459,7 @@
         </div>
 
         <!-- ============================================
-             2. LA PREGUNTA O INTERÉS DE INVESTIGACIÓN (CON SUB-TOGGLES PASO A Y PASO B)
+             2. LA PREGUNTA O INTERÉS DE INVESTIGACIÓN (CON TOGGLE BUTTONS)
              ============================================ -->
         <div class="main-card">
             <div class="card-header">
@@ -379,81 +493,65 @@
                         </div>
                     </div>
 
-                    <!-- DESPLIEGUE EN DOS SUB-CARDS TIPO TOGGLE -->
-                    <div style="display:flex; flex-direction:column; gap:15px; margin-top:20px;">
+                    <!-- TOGGLE BUTTONS DE PESTAÑAS (PASO A Y PASO B) -->
+                    <div class="toggle-btn-group">
+                        <button id="btnTabA" class="toggle-tab-btn active" onclick="switchTabP2('panelA', 'btnTabA')">
+                            ✍️ Paso A: Pregunta Preliminar
+                        </button>
+                        <button id="btnTabB" class="toggle-tab-btn" onclick="switchTabP2('panelB', 'btnTabB')">
+                            🧩 Paso B: Diagnóstico DOFA
+                        </button>
+                    </div>
 
-                        <!-- SUB-CARD PASO A: PREGUNTA PRELIMINAR -->
-                        <div class="sub-card active">
-                            <div class="sub-card-header">
-                                <div class="sub-header-title">
-                                    <span>✍️ Paso A: Pregunta o Interés Preliminar (Borrador Inicial)</span>
-                                </div>
-                                <span class="toggle-arrow">▼</span>
-                            </div>
-                            <div class="sub-card-body">
-                                <div class="sub-card-content">
-                                    <div class="form-group">
-                                        <label for="preguntaInicial">Escribe tu idea o borrador de pregunta inicial:</label>
-                                        <textarea id="preguntaInicial" class="form-control" placeholder="Ej: ¿Cómo optimizar el proceso de secado de cacaoyal para mejorar la calidad sensorial mediante prototipos solares en Cartago?" oninput="registrarCambioPregunta()"></textarea>
-                                    </div>
-
-                                    <div class="btn-group-custom">
-                                        <button class="btn-sena" onclick="guardarPreguntaInicial()">💾 Guardar Pregunta Inicial</button>
-                                        <button class="btn-secondary" onclick="asistenteIaPregunta()">🤖 Asistente IA (Revisar y Recomendar)</button>
-                                        <button class="btn-undo" onclick="rehacerPreguntaUndo()">↩️ Rehacer Pregunta</button>
-                                    </div>
-                                    <span id="msgInicial" style="display:block; color:var(--sena-verde); font-weight:700; margin-top:5px;"></span>
-
-                                    <!-- RECOMENDACIÓN ASISTENTE IA -->
-                                    <div id="boxRecomendacionIa" style="display:none; margin-top:15px;" class="callout success">
-                                        <div class="callout-title">💡 Diagnóstico y Recomendaciones del Asistente IA (Sampieri)</div>
-                                        <div id="contenidoRecomendacionIa"></div>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- CONTENIDO PESTAÑA PASO A -->
+                    <div id="panelA" class="tab-panel active">
+                        <div class="form-group">
+                            <label for="preguntaInicial">Escribe tu idea o borrador de pregunta inicial:</label>
+                            <textarea id="preguntaInicial" class="form-control" placeholder="Ej: ¿Cómo optimizar el proceso de secado de cacaoyal para mejorar la calidad sensorial mediante prototipos solares en Cartago?" oninput="registrarCambioPregunta()"></textarea>
                         </div>
 
-                        <!-- SUB-CARD PASO B: DIAGNÓSTICO DOFA -->
-                        <div class="sub-card">
-                            <div class="sub-card-header">
-                                <div class="sub-header-title">
-                                    <span>🧩 Paso B: Diagnóstico Situacional DOFA (Manual / Asistido con IA)</span>
-                                </div>
-                                <span class="toggle-arrow">▼</span>
+                        <div class="btn-group-custom">
+                            <button class="btn-sena" onclick="guardarPreguntaInicial()">💾 Guardar Pregunta Inicial</button>
+                            <button class="btn-secondary" onclick="asistenteIaPregunta()">🤖 Asistente IA (Revisar y Recomendar)</button>
+                            <button class="btn-undo" onclick="rehacerPreguntaUndo()">↩️ Rehacer Pregunta</button>
+                        </div>
+                        <span id="msgInicial" style="display:block; color:var(--sena-verde); font-weight:700; margin-top:5px;"></span>
+
+                        <div id="boxRecomendacionIa" style="display:none; margin-top:15px;" class="callout success">
+                            <div class="callout-title">💡 Diagnóstico y Recomendaciones del Asistente IA (Sampieri)</div>
+                            <div id="contenidoRecomendacionIa"></div>
+                        </div>
+                    </div>
+
+                    <!-- CONTENIDO PESTAÑA PASO B -->
+                    <div id="panelB" class="tab-panel">
+                        <p style="font-size:0.9rem; color:#546E7A; margin-bottom:15px;">Diligencia manualmente estos cuadrantes o pulsa para enriquecerlos con IA. Todos los campos son 100% editables.</p>
+
+                        <div class="btn-group-custom">
+                            <button class="btn-secondary" onclick="generarOEnriquecerDofa()">🤖 Generar / Enriquecer DOFA con IA</button>
+                            <button class="btn-sena" onclick="guardarDofaManual()">💾 Guardar DOFA</button>
+                            <button class="btn-undo" onclick="rehacerDofaUndo()">↩️ Rehacer DOFA (Ctrl+Z)</button>
+                        </div>
+                        <span id="msgDofa" style="display:block; color:var(--sena-azul); font-weight:700; margin-top:5px;"></span>
+
+                        <div class="grid-dofa">
+                            <div class="dofa-box d">
+                                <h5 style="color:#C62828;">🔴 Debilidades (Internas)</h5>
+                                <textarea id="dofaD" class="form-control" placeholder="Ej: Falta de equipos de medición de humedad en el ambiente..." oninput="registarCambioDofaInput()"></textarea>
                             </div>
-                            <div class="sub-card-body">
-                                <div class="sub-card-content">
-                                    <p style="font-size:0.9rem; color:#546E7A;">Diligencia manualmente estos cuadrantes o pulsa para enriquecerlos con IA. Todos los campos son 100% editables.</p>
-
-                                    <div class="btn-group-custom">
-                                        <button class="btn-secondary" onclick="generarOEnriquecerDofa()">🤖 Generar / Enriquecer DOFA con IA</button>
-                                        <button class="btn-sena" onclick="guardarDofaManual()">💾 Guardar DOFA</button>
-                                        <button class="btn-undo" onclick="rehacerDofaUndo()">↩️ Rehacer DOFA (Ctrl+Z)</button>
-                                    </div>
-                                    <span id="msgDofa" style="display:block; color:var(--sena-azul); font-weight:700; margin-top:5px;"></span>
-
-                                    <div class="grid-dofa">
-                                        <div class="dofa-box d">
-                                            <h5 style="color:#C62828;">🔴 Debilidades (Internas)</h5>
-                                            <textarea id="dofaD" class="form-control" placeholder="Ej: Falta de equipos de medición de humedad en el ambiente..." oninput="registarCambioDofaInput()"></textarea>
-                                        </div>
-                                        <div class="dofa-box o">
-                                            <h5 style="color:#1565C0;">🔵 Oportunidades (Externas)</h5>
-                                            <textarea id="dofaO" class="form-control" placeholder="Ej: Convocatorias SENNOVA para proyectos agroindustriales..." oninput="registarCambioDofaInput()"></textarea>
-                                        </div>
-                                        <div class="dofa-box f">
-                                            <h5 style="color:#2E7D32;">🟢 Fortalezas (Internas)</h5>
-                                            <textarea id="dofaF" class="form-control" placeholder="Ej: Aprendices motivados de la ficha de Agroindustria..." oninput="registarCambioDofaInput()"></textarea>
-                                        </div>
-                                        <div class="dofa-box a">
-                                            <h5 style="color:#E65100;">🟠 Amenazas (Externas)</h5>
-                                            <textarea id="dofaA" class="form-control" placeholder="Ej: Variaciones climáticas extremas en la zona rural..." oninput="registarCambioDofaInput()"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="dofa-box o">
+                                <h5 style="color:#1565C0;">🔵 Oportunidades (Externas)</h5>
+                                <textarea id="dofaO" class="form-control" placeholder="Ej: Convocatorias SENNOVA para proyectos agroindustriales..." oninput="registarCambioDofaInput()"></textarea>
+                            </div>
+                            <div class="dofa-box f">
+                                <h5 style="color:#2E7D32;">🟢 Fortalezas (Internas)</h5>
+                                <textarea id="dofaF" class="form-control" placeholder="Ej: Aprendices motivados de la ficha de Agroindustria..." oninput="registarCambioDofaInput()"></textarea>
+                            </div>
+                            <div class="dofa-box a">
+                                <h5 style="color:#E65100;">🟠 Amenazas (Externas)</h5>
+                                <textarea id="dofaA" class="form-control" placeholder="Ej: Variaciones climáticas extremas en la zona rural..." oninput="registarCambioDofaInput()"></textarea>
                             </div>
                         </div>
-
                     </div>
 
                 </div>
@@ -583,64 +681,156 @@
             <div class="card-body">
                 <div class="card-content">
                     <h3>🔄 Inmersión Territorial, Mapa de Actores y Árbol de Problemas (EML)</h3>
-                    <p>Integramos la <strong>Pregunta Inicial</strong> y la <strong>Matriz DOFA</strong> (del Punto 2) con un diagnóstico de 10 variables estructurado en Lógica de Marco Lógico para generar tu pregunta refinada y ruta metodológica.</p>
+                    <p style="margin-bottom:15px;">Completa las pestañas del diagnóstico. A medida que avanzas, la tarjeta fija de consolidación actualizará tu pregunta y ruta metodológica recomendada.</p>
 
-                    <div class="grid-comparativa">
-                        <div class="comp-box">
-                            <h4 style="color:var(--sena-naranja);">📝 Insumos Iniciales (Punto 2)</h4>
-                            <p><strong>Pregunta Inicial:</strong></p>
-                            <div id="displayP2Pregunta" style="font-style:italic; padding:8px; background:#F5F7FA; border-radius:6px; margin-bottom:10px;">(No ingresada)</div>
-                            <p><strong>DOFA Consolidada:</strong></p>
-                            <div id="displayP2Dofa" style="font-size:0.85rem; padding:8px; background:#F5F7FA; border-radius:6px;">(No diligenciada)</div>
+                    <!-- TARJETA PERMANENTE VISIBLE -->
+                    <div class="comp-box" style="border-top: 5px solid var(--sena-verde); background:#ffffff; margin-bottom:20px; box-shadow:0 6px 18px rgba(0,0,0,0.06);">
+                        <h4 style="color:var(--sena-verde); margin-bottom:10px; display:flex; align-items:center; justify-style:space-between;">
+                            <span>📌 Consolidado Permanente del Investigador</span>
+                            <span id="badgeEstadoPregunta" style="font-size:0.75rem; background:#FFECB3; color:#E65100; padding:3px 10px; border-radius:12px; font-weight:800;">EN PROCESO DE DIAGNÓSTICO</span>
+                        </h4>
+                        
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
+                            <div>
+                                <strong style="font-size:0.85rem; color:#546E7A;">✍️ Pregunta Inicial (Punto 2):</strong>
+                                <div id="displayP2Pregunta" style="font-style:italic; font-size:0.9rem; padding:8px 12px; background:#F5F7FA; border-radius:6px; border-left:3px solid var(--sena-naranja); margin-top:4px;">(No ingresada)</div>
+                            </div>
+                            <div>
+                                <strong style="font-size:0.85rem; color:#546E7A;">🧩 Matriz DOFA (Punto 2):</strong>
+                                <div id="displayP2Dofa" style="font-size:0.85rem; padding:8px 12px; background:#F5F7FA; border-radius:6px; border-left:3px solid var(--sena-azul); margin-top:4px;">(No acumulada)</div>
+                            </div>
                         </div>
 
-                        <div class="comp-box emergente">
-                            <h4 style="color:var(--sena-verde);">🎯 Diagnóstico Situacional de 10 Variables (N0)</h4>
-                            <p style="font-size:0.9rem;">Responde o ajusta estas 10 preguntas organizadas por EML (Actores, Causas, Efectos, Entorno):</p>
+                        <div>
+                            <strong style="font-size:0.88rem; color:var(--sena-verde);">🎯 Pregunta Final Refinada e Inyectada (N0):</strong>
+                            <div id="displayPreguntaRefinadaFija" style="font-weight:700; font-size:0.95rem; color:#1B5E20; padding:12px; background:#E8F5E9; border-radius:8px; border-left:5px solid var(--sena-verde); margin-top:4px;">
+                                <em>La pregunta se ensamblará automáticamente al completar las variables y presionar 'Auditar Diagnóstico'.</em>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="callout warning">
-                        <div class="callout-title">📋 Interrogatorio de Caracterización Territorial (10 Variables)</div>
+                    <div class="btn-group-custom" style="margin-bottom:15px;">
+                        <button class="btn-secondary" onclick="preDiligenciarDiagIa()">🤖 Pre-diligenciar Diagnóstico con IA</button>
+                        <button class="btn-undo" onclick="rehacerDiagUndo()">↩️ Rehacer Diagnóstico (Ctrl+Z)</button>
+                    </div>
+                    <span id="msgDiag" style="display:block; color:var(--sena-azul); font-weight:700; font-size:0.85rem;"></span>
 
-                        <div class="grid-10q" style="margin-top:15px;">
-                            <div class="form-group">
-                                <label>1. Mapa de Actores Afectados / Beneficiarios:</label>
-                                <input type="text" id="q1" class="form-control" placeholder="Ej: 22 aprendices de Mantenimiento / 15 mujeres cacaoteras">
+                    <!-- TOGGLE BUTTONS / PESTAÑAS DEL EJE 7 -->
+                    <div class="toggle-btn-group">
+                        <button id="btnTab7Actores" class="toggle-tab-btn active green-tab" onclick="switchTabP7('panel7Actores', 'btnTab7Actores')">
+                            👥 1. Actores
+                        </button>
+                        <button id="btnTab7Arbol" class="toggle-tab-btn green-tab" onclick="switchTabP7('panel7Arbol', 'btnTab7Arbol')">
+                            🌳 2. Árbol de Problemas
+                        </button>
+                        <button id="btnTab7Meto" class="toggle-tab-btn green-tab" onclick="switchTabP7('panel7Meto', 'btnTab7Meto')">
+                            📐 3. Metodología y Entorno
+                        </button>
+                        <button id="btnTab7Obs" class="toggle-tab-btn green-tab" onclick="switchTabP7('panel7Obs', 'btnTab7Obs')">
+                            💬 4. Observaciones
+                        </button>
+                        <button id="btnTab7Final" class="toggle-tab-btn green-tab" onclick="switchTabP7('panel7Final', 'btnTab7Final')">
+                            🎯 5. Exportación PDF y Ficha
+                        </button>
+                    </div>
+
+                    <!-- CATEGORÍA 1: ACTORES -->
+                    <div id="panel7Actores" class="tab-panel active">
+                        <h4 style="color:var(--sena-verde); margin-bottom:12px;">👥 Categoría 1: Mapa de Actores</h4>
+                        <div class="form-group">
+                            <label>1. Actores Afectados / Beneficiarios Directos:</label>
+                            <input type="text" id="q1" class="form-control" placeholder="Ej: 22 aprendices de Mantenimiento / 15 mujeres cacaoteras" oninput="registrarCambioDiagInput()">
+                        </div>
+                        <div class="form-group">
+                            <label>2. Actores Aliados / Instituciones del Entorno:</label>
+                            <input type="text" id="q2" class="form-control" placeholder="Ej: Comité de Cafeteros / Alcaldía de Cartago / Grupo SENNOVA" oninput="registrarCambioDiagInput()">
+                        </div>
+                    </div>
+
+                    <!-- CATEGORÍA 2: ÁRBOL DE PROBLEMAS -->
+                    <div id="panel7Arbol" class="tab-panel">
+                        <h4 style="color:var(--sena-verde); margin-bottom:12px;">🌳 Categoría 2: Árbol de Problemas (Enfoque de Marco Lógico)</h4>
+                        
+                        <div class="form-group">
+                            <label>5. Efectos Directos Negativos (Ramas / Copa):</label>
+                            <input type="text" id="q5" class="form-control" placeholder="Ej: Castigo en precio de venta y baja motivación de los aprendices" oninput="registrarCambioDiagInput()">
+                        </div>
+
+                        <div class="form-group">
+                            <label>3. Problema Central (Tronco del Árbol):</label>
+                            <input type="text" id="q3" class="form-control" placeholder="Ej: Pérdida de calidad en poscosecha por secado deficiente" oninput="registrarCambioDiagInput()">
+                        </div>
+
+                        <div class="form-group">
+                            <label>4. Causas Raíz Técnicas / Sociales (Raíces):</label>
+                            <input type="text" id="q4" class="form-control" placeholder="Ej: Control empírico de temperatura y falta de equipos automatizados" oninput="registrarCambioDiagInput()">
+                        </div>
+
+                        <figure class="card-media">
+                            <img src="img/arbolproblemas.jpeg" alt="Estructura del Árbol de Problemas (Marco Lógico)">
+                            <figcaption>Figura 1. Representación conceptual del Árbol de Problemas: Efectos (Copa), Problema Principal (Tronco) y Causas (Raíces).</figcaption>
+                        </figure>
+                    </div>
+
+                    <!-- CATEGORÍA 3: METODOLOGÍA Y ENTORNO (SISTEMA INTERACTIVO DE DECISIÓN METODOLÓGICA EN 3 PASOS) -->
+                    <div id="panel7Meto" class="tab-panel">
+                        <h4 style="color:var(--sena-verde); margin-bottom:12px;">📐 Categoría 3: Ruta Metodológica y Articulación con FPI</h4>
+                        
+                        <!-- ASISTENTE DE DECISIÓN METODOLÓGICA (WIZARD 3 PASOS ENCADENADOS) -->
+                        <div class="wizard-container">
+                            <div class="wizard-steps">
+                                <span class="wizard-step-item active" id="wizStepLabel1">1. Pregunta Raíz</span>
+                                <span>→</span>
+                                <span class="wizard-step-item" id="wizStepLabel2">2. Confirmación y Matiz</span>
+                                <span>→</span>
+                                <span class="wizard-step-item" id="wizStepLabel3">3. Resultado Guardado</span>
                             </div>
 
-                            <div class="form-group">
-                                <label>2. Actores Aliados / Instituciones del Entorno:</label>
-                                <input type="text" id="q2" class="form-control" placeholder="Ej: Comité de Cafeteros / Alcaldía de Cartago / Grupo SENNOVA">
+                            <!-- PASO 1: PREGUNTA RAÍZ -->
+                            <div id="wizStep1" class="wizard-subpanel">
+                                <h5 style="color:var(--sena-gris); font-size:0.98rem; margin-bottom:6px;">🧭 Asistente de Decisión Metodológica</h5>
+                                <p style="font-size:0.88rem; color:#546E7A; margin-bottom:12px;">
+                                    <strong>🔹 Pregunta 1 · La más importante:</strong> ¿Tu pregunta busca medir magnitudes, frecuencias o relaciones entre variables, o busca comprender significados, experiencias o procesos?
+                                </p>
+                                <div class="wizard-options-grid">
+                                    <button class="wizard-card-btn blue" onclick="seleccionarPaso1Wizard('cuanti')">
+                                        <h5 style="color:var(--sena-azul);">🔵 Medir</h5>
+                                        <p>Magnitudes, frecuencias, eficiencias técnicas o relaciones numéricas entre variables.</p>
+                                    </button>
+                                    <button class="wizard-card-btn green" onclick="seleccionarPaso1Wizard('cuali')">
+                                        <h5 style="color:var(--sena-verde);">🟢 Comprender</h5>
+                                        <p>Significados, saberes locales, experiencias humanas o procesos sociales.</p>
+                                    </button>
+                                    <button class="wizard-card-btn purple" onclick="seleccionarPaso1Wizard('mixto')">
+                                        <h5 style="color:var(--nivel5);">🟣 Ambas cosas</h5>
+                                        <p>Necesito desarrollar/medir una solución técnica y al mismo tiempo evaluar su impacto humano o didáctico.</p>
+                                    </button>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label>3. Problema Central (Tronco del Árbol):</label>
-                                <input type="text" id="q3" class="form-control" placeholder="Ej: Pérdida de calidad en poscosecha por secado deficiente">
+                            <!-- PASO 2: CONFIRMACIÓN Y MATIZ (SE ADAPTA SEGÚN LA SELECCIÓN DEL PASO 1) -->
+                            <div id="wizStep2" class="wizard-subpanel" style="display:none;">
+                                <h5 style="color:var(--sena-gris); font-size:0.98rem; margin-bottom:6px;">🧭 Paso 2: Confirmación y Matiz del Entorno SENA</h5>
+                                <p id="txtPreguntaPaso2" style="font-size:0.88rem; color:#546E7A; margin-bottom:12px;"></p>
+                                <div id="gridOpcionesPaso2" class="wizard-options-grid"></div>
+                                <button class="btn-undo" onclick="reiniciarWizardRuta()" style="margin-top:12px; padding:6px 16px; font-size:0.8rem;">↩️ Cambiar selección de Paso 1</button>
                             </div>
 
-                            <div class="form-group">
-                                <label>4. Causas Raíz Técnicas/Sociales (Raíces):</label>
-                                <input type="text" id="q4" class="form-control" placeholder="Ej: Control empírico de temperatura y falta de equipos automatizados">
+                            <!-- PASO 3: RESULTADO FINAL GUARDADO -->
+                            <div id="wizStep3" class="wizard-subpanel" style="display:none;">
+                                <div class="callout success" style="margin:0;">
+                                    <div class="callout-title">🎯 Ruta Metodológica Determinada y Guardada</div>
+                                    <div id="boxResultadoRutaWiz" style="margin-top:6px;"></div>
+                                </div>
+                                <button class="btn-undo" onclick="reiniciarWizardRuta()" style="margin-top:10px; padding:6px 16px; font-size:0.8rem;">🔄 Volver a evaluar ruta</button>
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label>5. Efectos Directos Negativos (Ramas):</label>
-                                <input type="text" id="q5" class="form-control" placeholder="Ej: Castigo en precio de venta y baja motivación de los aprendices">
-                            </div>
-
-                            <div class="form-group">
-                                <label>6. Propósito Metodológico Principal:</label>
-                                <select id="q6" class="form-control">
-                                    <option value="cuali">Cualitativo: Comprender percepciones, saberes locales o vivencias</option>
-                                    <option value="cuanti">Cuantitativo: Medir rendimiento técnico, variables o eficiencias</option>
-                                    <option value="mixto">Mixto: Diseñar/validar solución técnica y evaluar impacto humano</option>
-                                </select>
-                            </div>
-
+                        <div class="grid-10q">
                             <div class="form-group">
                                 <label>7. Involucramiento y Rol de los Aprendices:</label>
-                                <select id="q7" class="form-control">
+                                <select id="q7" class="form-control" onchange="registrarCambioDiagInput()">
+                                    <option value="">-- Selecciona articulación --</option>
                                     <option value="Toda la ficha vía Proyecto Formativo integral">Toda la ficha vía Proyecto Formativo integral</option>
                                     <option value="Grupo focalizado vía Semillero de Investigación SENNOVA">Grupo focalizado vía Semillero de Investigación SENNOVA</option>
                                     <option value="Aprendices como coinvestigadores de campo en la comunidad">Aprendices como coinvestigadores de campo en la comunidad</option>
@@ -648,37 +838,58 @@
                             </div>
 
                             <div class="form-group">
-                                <label>8. Método de Recolección de Datos en Campo:</label>
-                                <select id="q8" class="form-control">
-                                    <option value="Pruebas de laboratorio, medición técnica e instrumental">Pruebas de laboratorio, medición técnica e instrumental</option>
-                                    <option value="Entrevistas semiestructuradas y diarios de campo">Entrevistas semiestructuradas y diarios de campo</option>
-                                    <option value="Encuestas estructuradas, grupos focales y talleres participativos">Encuestas estructuradas, grupos focales y talleres participativos</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label>9. Restricciones Técnicas/Territoriales:</label>
-                                <input type="text" id="q9" class="form-control" placeholder="Ej: Conectividad intermitente en finca / Presupuesto limitado">
-                            </div>
-
-                            <div class="form-group">
-                                <label>10. Entregable Tangible y Transferencia Didáctica:</label>
-                                <input type="text" id="q10" class="form-control" placeholder="Ej: Prototipo de secador automatizado + Guía de aprendizaje">
+                                <label>9. Restricciones Técnicas / Territoriales:</label>
+                                <input type="text" id="q9" class="form-control" placeholder="Ej: Conectividad intermitente en finca / Presupuesto limitado" oninput="registrarCambioDiagInput()">
                             </div>
                         </div>
 
-                        <button class="btn-sena" onclick="procesarRefinamientoV1()" style="margin-top:15px;">⚡ Ensamble de Pregunta Refinada y Ruta Metodológica (V1)</button>
+                        <div class="form-group" style="margin-top:10px;">
+                            <label>10. Entregable Tangible y Transferencia Didáctica:</label>
+                            <input type="text" id="q10" class="form-control" placeholder="Ej: Prototipo de secador automatizado + Guía de aprendizaje" oninput="registrarCambioDiagInput()">
+                        </div>
                     </div>
 
-                    <div id="resultadoRefinamiento" style="display:none; margin-top:25px;">
-                        <div class="comp-box emergente" style="margin-bottom:20px;">
-                            <h4 style="color:var(--sena-verde); margin-bottom:10px;">🎯 Tu Pregunta Refinada e Inyectada con Contexto Real (N0)</h4>
-                            <div id="displayPreguntaRefinada" style="font-weight:700; font-size:1.05rem; color:#1B5E20; padding:15px; background:#E8F5E9; border-radius:8px; border-left:5px solid var(--sena-verde);"></div>
+                    <!-- CATEGORÍA 4: OBSERVACIONES -->
+                    <div id="panel7Obs" class="tab-panel">
+                        <h4 style="color:var(--sena-verde); margin-bottom:12px;">💬 Categoría 4: Inyección Humana del Investigador</h4>
+                        <div class="form-group">
+                            <label for="obsInvestigador">Observaciones / Ajustes Especiales del Investigador:</label>
+                            <textarea id="obsInvestigador" class="form-control" placeholder="Escribe aquí matices éticos, intencionalidades pedagógicas específicas o notas de contexto no contempladas en las pestañas anteriores..." oninput="registrarCambioDiagInput()"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- CATEGORÍA 5: PREGUNTA FINAL Y EXPORTACIÓN PDF -->
+                    <div id="panel7Final" class="tab-panel">
+                        <h4 style="color:var(--sena-verde); margin-bottom:12px;">🎯 Categoría 5: Exportación y Ficha Final</h4>
+                        <p style="font-size:0.9rem; color:#546E7A; margin-bottom:15px;">Pulsa el botón de auditoría para validar la inyección de contexto. Una vez procesado, podrás descargar el reporte técnico en PDF.</p>
+
+                        <div style="margin-bottom:20px;">
+                            <button class="btn-sena" onclick="procesarRefinamientoV1()" style="width:100%; justify-content:center; padding:12px; font-size:1rem;">⚡ Auditar Diagnóstico y Validar Pregunta Final</button>
                         </div>
 
-                        <div class="callout success">
-                            <div class="callout-title">📐 Diagnóstico de Marco Lógico y Ruta Metodológica Sugerida</div>
-                            <div id="contenidoRutaDiag"></div>
+                        <div id="boxAlertasIncompleto" style="display:none; margin-top:15px;" class="callout warning">
+                            <div class="callout-title">⚠️ Alerta de Calidad: Campos Incompletos o Poco Densos</div>
+                            <div id="contenidoAlertasIncompleto"></div>
+                        </div>
+
+                        <div id="resultadoRefinamiento" style="display:none; margin-top:20px;">
+                            <div id="reportePdfContainer" style="background:#ffffff; padding:20px; border-radius:12px; border:1px solid #CFD8DC;">
+                                <div style="text-align:center; border-bottom:2px solid var(--sena-verde); padding-bottom:10px; margin-bottom:15px;">
+                                    <h3 style="color:var(--sena-verde);">SENA · Centro de Tecnologías Agroindustriales</h3>
+                                    <p style="font-size:0.85rem; color:#607D8B;">Ficha Técnica de Refinamiento Metodológico e Inyección de Contexto Real (N0)</p>
+                                </div>
+
+                                <div class="callout success" style="margin:0;">
+                                    <div class="callout-title">📐 Ruta Metodológica y Enfoque EML Consolidado</div>
+                                    <div id="contenidoRutaDiag"></div>
+                                </div>
+                            </div>
+
+                            <div class="btn-group-custom" style="margin-top:20px; justify-content:center;">
+                                <button class="btn-sena" onclick="generarPDFExportable()" style="padding:12px 25px; font-size:1rem;">📄 Descargar Reporte PDF Total</button>
+                                <button class="btn-secondary" onclick="copiarResumenPortapapeles()" style="padding:12px 25px; font-size:1rem;">📋 Copiar Resumen al Portapapeles</button>
+                            </div>
+                            <span id="msgExport" style="display:block; text-align:center; color:var(--sena-verde); font-weight:700; margin-top:8px;"></span>
                         </div>
                     </div>
 
@@ -699,8 +910,19 @@
     // HISTORIALES Y ESTADOS (CTRL+Z)
     let preguntaHistory = [];
     let dofaHistory = [];
+    let diagHistory = [];
     let debounceTimerP = null;
     let debounceTimerD = null;
+    let debounceTimerDiag = null;
+
+    // ESTADO DEL WIZARD METODOLÓGICO
+    let wizardSelection = {
+        paso1: null,
+        paso2: null,
+        propositoCalculado: "",
+        metodoCalculado: "",
+        nombreRuta: ""
+    };
 
     document.addEventListener('DOMContentLoaded', function() {
         // Toggles Cards Principales
@@ -714,24 +936,31 @@
             });
         });
 
-        // Toggles Sub-Cards del Punto 2
-        const subCards = document.querySelectorAll('.sub-card');
-        subCards.forEach(sub => {
-            const subHeader = sub.querySelector('.sub-card-header');
-            subHeader.addEventListener('click', (e) => {
-                e.stopPropagation(); // Evitar cerrar la card principal
-                sub.classList.toggle('active');
-            });
-        });
-
         // Registrar estados iniciales
         guardarEstadoPregunta();
         guardarEstadoDofa();
+        guardarEstadoDiag();
     });
 
-    /* ====================================================
-       LÓGICA PASO A: PREGUNTA PRELIMINAR
-       ==================================================== */
+    /* CONMUTACIÓN DE PESTAÑAS / TOGGLE BUTTONS EN EJE 2 */
+    function switchTabP2(panelId, btnId) {
+        document.querySelectorAll('#panelA, #panelB').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('#btnTabA, #btnTabB').forEach(b => b.classList.remove('active'));
+
+        document.getElementById(panelId).classList.add('active');
+        document.getElementById(btnId).classList.add('active');
+    }
+
+    /* CONMUTACIÓN DE PESTAÑAS / TOGGLE BUTTONS EN EJE 7 (5 CATEGORÍAS) */
+    function switchTabP7(panelId, btnId) {
+        document.querySelectorAll('#panel7Actores, #panel7Arbol, #panel7Meto, #panel7Obs, #panel7Final').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('#btnTab7Actores, #btnTab7Arbol, #btnTab7Meto, #btnTab7Obs, #btnTab7Final').forEach(b => b.classList.remove('active'));
+
+        document.getElementById(panelId).classList.add('active');
+        document.getElementById(btnId).classList.add('active');
+    }
+
+    /* LÓGICA PASO A: PREGUNTA PRELIMINAR */
     function guardarEstadoPregunta() {
         const val = document.getElementById('preguntaInicial').value;
         if (preguntaHistory.length === 0 || preguntaHistory[preguntaHistory.length - 1] !== val) {
@@ -796,9 +1025,7 @@
         document.getElementById('boxRecomendacionIa').style.display = 'block';
     }
 
-    /* ====================================================
-       LÓGICA PASO B: DIAGNÓSTICO DOFA
-       ==================================================== */
+    /* LÓGICA PASO B: DIAGNÓSTICO DOFA */
     function getDofaCurrentState() {
         return {
             d: document.getElementById('dofaD').value,
@@ -866,9 +1093,161 @@
         setTimeout(() => { document.getElementById('msgDofa').innerText = ''; }, 3500);
     }
 
-    /* ====================================================
-       SINCRONIZACIÓN Y ENSAMBLE DEL PUNTO 7
-       ==================================================== */
+    /* LÓGICA DEL ASISTENTE DE DECISIÓN METODOLÓGICA (3 PASOS) */
+    function seleccionarPaso1Wizard(opcion) {
+        wizardSelection.paso1 = opcion;
+        document.getElementById('wizStep1').style.display = 'none';
+        document.getElementById('wizStep2').style.display = 'block';
+
+        document.getElementById('wizStepLabel1').className = 'wizard-step-item completed';
+        document.getElementById('wizStepLabel2').className = 'wizard-step-item active';
+
+        const txtPreg = document.getElementById('txtPreguntaPaso2');
+        const gridOps = document.getElementById('gridOpcionesPaso2');
+
+        if (opcion === 'cuanti') {
+            txtPreg.innerHTML = '<strong>🔹 Pregunta 2 · Confirmación:</strong> Al buscar medir variables, ¿cuál es el alcance principal del entorno técnico SENA?';
+            gridOps.innerHTML = `
+                <button class="wizard-card-btn blue" onclick="finalizarWizardRuta('Ruta Tecnológica / Aplicada', 'Cuantitativo: Medición técnica de variables y rendimiento', 'Pruebas de laboratorio, calibración de sensores y fichas de registro instrumental')">
+                    <h5>🔬 Desarrollo o Prototipado</h5>
+                    <p>Diseñar, automatizar o calibrar un equipo, software o producto tangible.</p>
+                </button>
+                <button class="wizard-card-btn blue" onclick="finalizarWizardRuta('Ruta Empírico-Analítica', 'Cuantitativo: Evaluación comparativa de eficiencia', 'Encuestas estandarizadas, rúbricas e indicadores de laboratorio')">
+                    <h5>📊 Evaluación Comparativa</h5>
+                    <p>Medir la diferencia entre un método tradicional y uno optimizado.</p>
+                </button>
+            `;
+        } else if (opcion === 'cuali') {
+            txtPreg.innerHTML = '<strong>🔹 Pregunta 2 · Confirmación:</strong> Al buscar comprender vivencias o saberes, ¿quiénes son los actores clave?';
+            gridOps.innerHTML = `
+                <button class="wizard-card-btn green" onclick="finalizarWizardRuta('Ruta Social / Comunitaria', 'Cualitativo: Caracterización de saberes locales e impacto social', 'Entrevistas semiestructuradas, diarios de campo y talleres participativos')">
+                    <h5>👥 Comunidad o Productores</h5>
+                    <p>Comprender necesidades de agricultores, mujeres rurales o sectores locales.</p>
+                </button>
+                <button class="wizard-card-btn green" onclick="finalizarWizardRuta('Ruta Pedagógica IAPed', 'Cualitativo: Transformación de la práctica de formación en el aula', 'Guiones de grupos focales, observaciones de clase y diarios pedagógicos')">
+                    <h5>🎓 Aprendices e Instructores</h5>
+                    <p>Transformar el proceso de enseñanza y apropiación de conocimientos en la FPI.</p>
+                </button>
+            `;
+        } else {
+            txtPreg.innerHTML = '<strong>🔹 Pregunta 2 · Confirmación:</strong> En una investigación mixta SENA, ¿cuál es el elemento articulador entre la técnica y las personas?';
+            gridOps.innerHTML = `
+                <button class="wizard-card-btn purple" onclick="finalizarWizardRuta('Ruta Mixta / Didactizada', 'Mixto: Solución técnica con pretexto pedagógico y evaluación de impacto', 'Protocolos técnicos instrumentalizados + Encuestas/Grupos focales con la comunidad')">
+                    <h5>🛠️ Prototipo como Pretexto Pedagógico</h5>
+                    <p>Construir la solución técnica junto con los aprendices para desarrollar sus competencias.</p>
+                </button>
+                <button class="wizard-card-btn purple" onclick="finalizarWizardRuta('Ruta Triangulada de Innovación', 'Mixto: Validación técnica e impacto socioeconómico', 'Mediciones de campo estandarizadas + Entrevistas a profundidad con aliados')">
+                    <h5>📈 Validación Técnica + Mercado</h5>
+                    <p>Probar el prototipo en campo y evaluar su aceptación económica por los beneficiarios.</p>
+                </button>
+            `;
+        }
+    }
+
+    function finalizarWizardRuta(nombreRuta, proposito, metodo) {
+        wizardSelection.nombreRuta = nombreRuta;
+        wizardSelection.propositoCalculado = proposito;
+        wizardSelection.metodoCalculado = metodo;
+
+        document.getElementById('wizStep2').style.display = 'none';
+        document.getElementById('wizStep3').style.display = 'block';
+
+        document.getElementById('wizStepLabel2').className = 'wizard-step-item completed';
+        document.getElementById('wizStepLabel3').className = 'wizard-step-item active';
+
+        document.getElementById('boxResultadoRutaWiz').innerHTML = `
+            <p style="margin-bottom:4px;"><strong>Ruta Asignada:</strong> <span style="color:var(--sena-verde); font-weight:800;">${nombreRuta}</span></p>
+            <p style="margin-bottom:4px;"><strong>6. Propósito Metodológico:</strong> ${proposito}</p>
+            <p style="margin-bottom:0;"><strong>8. Método de Recolección en Campo:</strong> ${metodo}</p>
+        `;
+
+        guardarEstadoDiag();
+    }
+
+    function reiniciarWizardRuta() {
+        wizardSelection = { paso1: null, paso2: null, propositoCalculado: "", metodoCalculado: "", nombreRuta: "" };
+        document.getElementById('wizStep1').style.display = 'block';
+        document.getElementById('wizStep2').style.display = 'none';
+        document.getElementById('wizStep3').style.display = 'none';
+
+        document.getElementById('wizStepLabel1').className = 'wizard-step-item active';
+        document.getElementById('wizStepLabel2').className = 'wizard-step-item';
+        document.getElementById('wizStepLabel3').className = 'wizard-step-item';
+    }
+
+    /* SINCRONIZACIÓN Y DIAGNÓSTICO EN PUNTO 7 */
+    function getDiagCurrentState() {
+        let state = {};
+        for(let i=1; i<=10; i++) {
+            if (document.getElementById('q'+i)) {
+                state['q'+i] = document.getElementById('q'+i).value;
+            }
+        }
+        state['obs'] = document.getElementById('obsInvestigador').value;
+        state['wizard'] = wizardSelection;
+        return state;
+    }
+
+    function guardarEstadoDiag() {
+        const st = getDiagCurrentState();
+        if(diagHistory.length > 0) {
+            const last = diagHistory[diagHistory.length - 1];
+            let same = true;
+            for(let i=1; i<=10; i++) { if(last['q'+i] && last['q'+i] !== st['q'+i]) same = false; }
+            if(last['obs'] !== st['obs']) same = false;
+            if(same) return;
+        }
+        diagHistory.push(st);
+    }
+
+    function registrarCambioDiagInput() {
+        clearTimeout(debounceTimerDiag);
+        debounceTimerDiag = setTimeout(() => {
+            guardarEstadoDiag();
+        }, 800);
+    }
+
+    function rehacerDiagUndo() {
+        if (diagHistory.length > 1) {
+            diagHistory.pop();
+            const prev = diagHistory[diagHistory.length - 1];
+            for(let i=1; i<=10; i++) {
+                if(document.getElementById('q'+i) && prev['q'+i] !== undefined) {
+                    document.getElementById('q'+i).value = prev['q'+i];
+                }
+            }
+            document.getElementById('obsInvestigador').value = prev['obs'] || "";
+            document.getElementById('msgDiag').innerText = '↩️ Cambios de diagnóstico rehechos al estado anterior.';
+        } else {
+            document.getElementById('msgDiag').innerText = 'ℹ️ Estás en el estado inicial del diagnóstico.';
+        }
+        setTimeout(() => { document.getElementById('msgDiag').innerText = ''; }, 3500);
+    }
+
+    function preDiligenciarDiagIa() {
+        guardarEstadoDiag();
+
+        document.getElementById('q1').value = "22 aprendices del tecnólogo y 15 productores agropecuarios locales";
+        document.getElementById('q2').value = "Comité Local de Ganaderos / Centro de Tecnologías Agroindustriales";
+        document.getElementById('q3').value = "Baja eficiencia y pérdida de calidad en la transformación de la materia prima";
+        document.getElementById('q4').value = "Inexistencia de control automatizado de variables y monitoreo empírico";
+        document.getElementById('q5').value = "Pérdidas económicas en venta y baja transferencia de competencias técnicas";
+        document.getElementById('q7').value = "Toda la ficha vía Proyecto Formativo integral";
+        document.getElementById('q9').value = "Restricción de presupuesto y conectividad limitada en zona rural";
+        document.getElementById('q10').value = "Prototipo funcional automatizado + Guía de aprendizaje didactizada";
+
+        // Pre-cargar selección de Wizard por defecto
+        finalizarWizardRuta(
+            'Ruta Mixta / Didactizada',
+            'Mixto: Solución técnica con pretexto pedagógico y evaluación de impacto',
+            'Protocolos técnicos instrumentalizados + Encuestas/Grupos focales con la comunidad'
+        );
+
+        guardarEstadoDiag();
+        document.getElementById('msgDiag').innerText = '🤖 Diagnóstico pre-diligenciado con IA. Puedes modificar libremente.';
+        setTimeout(() => { document.getElementById('msgDiag').innerText = ''; }, 3500);
+    }
+
     function actualizarVistaPunto7() {
         const pInit = document.getElementById('preguntaInicial').value.trim() || "(Aún no has ingresado tu pregunta inicial en el Punto 2)";
         document.getElementById('displayP2Pregunta').innerText = pInit;
@@ -879,60 +1258,116 @@
         const a = document.getElementById('dofaA').value.trim();
 
         if(d || o || f || a) {
-            document.getElementById('displayP2Dofa').innerHTML = `<strong>D:</strong> ${d.substring(0,30)}... | <strong>F:</strong> ${f.substring(0,30)}...`;
+            document.getElementById('displayP2Dofa').innerHTML = `<strong>D:</strong> ${d.substring(0,25)}... | <strong>F:</strong> ${f.substring(0,25)}...`;
         } else {
-            document.getElementById('displayP2Dofa').innerText = "(DOFA pendiente de diligenciar en Punto 2)";
+            document.getElementById('displayP2Dofa').innerText = "(Matriz DOFA pendiente de diligenciar en Punto 2)";
         }
     }
 
+    /* AUDITORÍA, ENSAMBLE Y ACTUALIZACIÓN EN TIEMPO REAL */
     function procesarRefinamientoV1() {
         actualizarVistaPunto7();
 
-        const q1 = document.getElementById('q1').value.trim() || "los aprendices y la comunidad";
-        const q2 = document.getElementById('q2').value.trim() || "actores del sector productivo";
-        const q3 = document.getElementById('q3').value.trim() || "necesidad o falla técnica identificada";
-        const q4 = document.getElementById('q4').value.trim() || "causas de control empírico o falta de tecnología";
-        const q5 = document.getElementById('q5').value.trim() || "baja eficiencia o impacto en el aprendizaje";
-        const q6 = document.getElementById('q6').value;
-        const q7 = document.getElementById('q7').value;
-        const q8 = document.getElementById('q8').value;
-        const q9 = document.getElementById('q9').value.trim() || "restricciones de tiempo o conectividad";
-        const q10 = document.getElementById('q10').value.trim() || "solución técnica didactizada";
+        const idsAudit = ['q1', 'q2', 'q3', 'q4', 'q5', 'q7', 'q9', 'q10'];
+        idsAudit.forEach(id => {
+            if(document.getElementById(id)) document.getElementById(id).classList.remove('input-error');
+        });
 
-        let prefijo = (q6 === 'cuali') ? "¿De qué manera la caracterización cualitativa de" : (q6 === 'cuanti') ? "¿En qué medida la evaluación experimental de" : "¿Cómo el desarrollo e implementación de";
-        let preguntaEnsamblada = `${prefijo} '${q3}', abordando las causas de '${q4}' junto con ${q1} y ${q2}, permite mitigar '${q5}' mediante ${q10}?`;
+        let faltantes = [];
+        const nombresVariables = {
+            q1: "1. Mapa de Actores Afectados", q2: "2. Actores Aliados", q3: "3. Problema Central",
+            q4: "4. Causas Raíz", q5: "5. Efectos Directos", q7: "7. Rol de los Aprendices",
+            q9: "9. Restricciones Técnicas", q10: "10. Entregable y Transferencia"
+        };
 
-        document.getElementById('displayPreguntaRefinada').innerText = preguntaEnsamblada;
+        idsAudit.forEach(id => {
+            let val = document.getElementById(id) ? document.getElementById(id).value.trim() : "";
+            if(!val || val.length < 3) {
+                faltantes.push(nombresVariables[id]);
+                if(document.getElementById(id)) document.getElementById(id).classList.add('input-error');
+            }
+        });
 
-        let enfoque = "", metodo = "", instrumentos = "";
-
-        if(q6 === 'cuali') {
-            enfoque = "Cualitativo (Enfoque Interpretativo / Hermenéutico)";
-            metodo = "Investigación-Acción Pedagógica (IAPed) / Estudio de Caso";
-            instrumentos = "Diarios de campo, guiones de entrevista semiestructurada, matrices de categorización cualitativa.";
-        } else if(q6 === 'cuanti') {
-            enfoque = "Cuantitativo (Enfoque Empírico-Analítico)";
-            metodo = "Descriptivo - Comparativo o Desarrollo Tecnológico Aplicado";
-            instrumentos = "Rúbricas estandarizadas, fichas de registro técnico de laboratorio, encuestas con escala Likert.";
-        } else {
-            enfoque = "Mixto (Diseño Concurrente o Secuencial TRIANGULADO)";
-            metodo = "Investigación-Acción Aplicada y Didactizada";
-            instrumentos = "Protocolos de pruebas técnicas + Guiones de grupos focales reflexivos con aprendices e instructores.";
+        if (!wizardSelection.nombreRuta) {
+            faltantes.push("Evaluación de la Ruta Metodológica en la Pestaña 3 (Completa el test de 3 preguntas)");
         }
 
+        if(faltantes.length > 0) {
+            let htmlAlertas = `<p style="margin-bottom:8px;">Se detectaron <strong>${faltantes.length} variable(s) o pasos pendientes</strong>. Para garantizar la soberanía cognitiva (N0), completa los campos marcados:</p><ul>`;
+            faltantes.forEach(f => {
+                htmlAlertas += `<li><strong>${f}</strong></li>`;
+            });
+            htmlAlertas += `</ul><p style="margin-top:8px; font-size:0.85rem; color:#C62828;"><em>Sugerencia: Puedes pulsar '🤖 Pre-diligenciar Diagnóstico con IA' para cargar una plantilla completa.</em></p>`;
+
+            document.getElementById('contenidoAlertasIncompleto').innerHTML = htmlAlertas;
+            document.getElementById('boxAlertasIncompleto').style.display = 'block';
+            document.getElementById('resultadoRefinamiento').style.display = 'none';
+            switchTabP7('panel7Final', 'btnTab7Final');
+            return;
+        } else {
+            document.getElementById('boxAlertasIncompleto').style.display = 'none';
+        }
+
+        const q1 = document.getElementById('q1').value.trim();
+        const q2 = document.getElementById('q2').value.trim();
+        const q3 = document.getElementById('q3').value.trim();
+        const q4 = document.getElementById('q4').value.trim();
+        const q5 = document.getElementById('q5').value.trim();
+        const q7 = document.getElementById('q7').value;
+        const q9 = document.getElementById('q9').value.trim();
+        const q10 = document.getElementById('q10').value.trim();
+        const obs = document.getElementById('obsInvestigador').value.trim();
+
+        let complementoObs = obs ? ` (Considerando intencionalidad: ${obs})` : '';
+        let preguntaEnsamblada = `¿Cómo el desarrollo e implementación de '${q10}' permite resolver '${q3}', abordando las causas de '${q4}' junto con ${q1} y ${q2}, para mitigar '${q5}'${complementoObs}?`;
+
+        // Actualizar tarjeta fija permanente y tarjeta final
+        document.getElementById('displayPreguntaRefinadaFija').innerText = preguntaEnsamblada;
+        document.getElementById('badgeEstadoPregunta').innerText = "✓ REFINADA (N0)";
+        document.getElementById('badgeEstadoPregunta').style.background = "#C8E6C9";
+        document.getElementById('badgeEstadoPregunta').style.color = "#1B5E20";
+
         const htmlRuta = `
-            <p><strong>🔹 Enfoque de Investigación:</strong> ${enfoque}</p>
-            <p><strong>🔹 Método / Alcance Recomendado:</strong> ${metodo}</p>
-            <p><strong>🔹 Articulación con Aprendices y Ficha:</strong> ${q7}</p>
-            <p><strong>🔹 Técnicas e Instrumentos en Campo:</strong> ${q8} (${instrumentos})</p>
+            <p style="margin-bottom:8px;"><strong>🎯 Pregunta Final Refinada:</strong><br><span style="color:#1B5E20; font-weight:700;">${preguntaEnsamblada}</span></p>
+            <p><strong>🔹 Ruta Metodológica Seleccionada:</strong> <span style="color:var(--sena-verde); font-weight:700;">${wizardSelection.nombreRuta}</span></p>
+            <p><strong>🔹 Propósito Metodológico:</strong> ${wizardSelection.propositoCalculado}</p>
+            <p><strong>🔹 Método e Instrumentos en Campo:</strong> ${wizardSelection.metodoCalculado}</p>
+            <p><strong>🔹 Articulación con Aprendices (FPI):</strong> ${q7}</p>
             <p><strong>🔹 Árbol de Problemas (EML):</strong> Causa: <em>${q4}</em> → Problema Central: <em>${q3}</em> → Efecto: <em>${q5}</em></p>
-            <p><strong>🔹 Entregable y Transferencia Didáctica:</strong> ${q10} (superando la restricción de ${q9})</p>
-            <hr style="margin:15px 0; border:none; border-top:1px solid #C8E6C9;">
-            <p style="font-size:0.9rem; color:#2E7D32;"><strong>💡 Siguiente Fase (V2):</strong> En la versión V1 el sistema ensambla el prompt con lógica determinista. Cuando activemos la API Key, un modelo LLM tomará este árbol de problemas + la DOFA del Punto 2 para redactar el planteamiento con elegancia académica profesional.</p>
+            <p><strong>🔹 Entregable y Transferencia:</strong> ${q10} (superando la restricción de ${q9})</p>
+            ${obs ? `<p><strong>💬 Observaciones del Investigador:</strong> ${obs}</p>` : ''}
         `;
 
         document.getElementById('contenidoRutaDiag').innerHTML = htmlRuta;
         document.getElementById('resultadoRefinamiento').style.display = 'block';
+
+        switchTabP7('panel7Final', 'btnTab7Final');
+    }
+
+    /* EXPORTACIÓN Y COPIA */
+    function generarPDFExportable() {
+        const element = document.getElementById('reportePdfContainer');
+        const opt = {
+            margin:       10,
+            filename:     'SENA_Refinamiento_Investigacion_IA.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2 },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save();
+        document.getElementById('msgExport').innerText = '📄 Descargando expediente técnico en PDF...';
+        setTimeout(() => { document.getElementById('msgExport').innerText = ''; }, 3500);
+    }
+
+    function copiarResumenPortapapeles() {
+        const preg = document.getElementById('displayPreguntaRefinadaFija').innerText;
+        const textoCopiar = `EXPEDIENTE DE INVESTIGACIÓN SENA\n\nPregunta Final Refinada:\n${preg}`;
+        
+        navigator.clipboard.writeText(textoCopiar).then(() => {
+            document.getElementById('msgExport').innerText = '📋 Pregunta y ficha copiadas al portapapeles con éxito.';
+            setTimeout(() => { document.getElementById('msgExport').innerText = ''; }, 3500);
+        });
     }
 </script>
 
