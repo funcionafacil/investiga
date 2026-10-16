@@ -32,11 +32,7 @@
             --transition: all 0.3s ease;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
@@ -47,14 +43,9 @@
             padding: 30px 15px;
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1100px; margin: 0 auto; }
 
-        /* ====================================================
-           HEADER INSTITUCIONAL
-           ==================================================== */
+        /* HEADER INSTITUCIONAL */
         .header {
             background: #ffffff;
             border-radius: var(--radius-main);
@@ -86,22 +77,12 @@
             line-height: 1.25;
         }
 
-        .header p {
-            color: #546E7A;
-            font-size: 1.05rem;
-            font-style: italic;
-        }
+        .header p { color: #546E7A; font-size: 1.05rem; font-style: italic; }
 
-        /* ====================================================
-           CARDS TOGGLE / ACORDEÓN
-           ==================================================== */
-        .cards-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+        /* CARDS TOGGLE PRINCIPALES Y SUB-CARDS */
+        .cards-wrapper { display: flex; flex-direction: column; gap: 20px; }
 
-        .main-card {
+        .main-card, .sub-card {
             background: #ffffff;
             border-radius: var(--radius-card);
             border: 1px solid #CFD8DC;
@@ -110,12 +91,9 @@
             transition: var(--transition);
         }
 
-        .main-card:hover {
-            border-color: #B0BEC5;
-            box-shadow: var(--shadow-hover);
-        }
+        .main-card:hover { border-color: #B0BEC5; box-shadow: var(--shadow-hover); }
 
-        .card-header {
+        .card-header, .sub-card-header {
             padding: 22px 28px;
             background: #ffffff;
             color: var(--sena-gris);
@@ -128,9 +106,13 @@
             border-left: 6px solid var(--sena-verde);
         }
 
-        .card-header:hover {
-            background: #F4F6F8;
+        .sub-card-header {
+            padding: 16px 20px;
+            background: #F5F7FA;
+            border-left: 5px solid var(--sena-azul);
         }
+
+        .card-header:hover, .sub-card-header:hover { background: #ECEFF1; }
 
         .main-card.active .card-header {
             background: linear-gradient(135deg, var(--sena-verde), #1b5e20);
@@ -138,28 +120,20 @@
             border-left-color: var(--sena-naranja);
         }
 
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            font-size: 1.2rem;
-            font-weight: 800;
+        .sub-card.active .sub-card-header {
+            background: linear-gradient(135deg, var(--sena-azul), #0D47A1);
+            color: #ffffff;
+            border-left-color: var(--sena-verde-claro);
         }
 
-        .header-title .icon {
-            font-size: 1.5rem;
-        }
+        .header-title { display: flex; align-items: center; gap: 14px; font-size: 1.2rem; font-weight: 800; }
+        .sub-header-title { display: flex; align-items: center; gap: 10px; font-size: 1rem; font-weight: 700; }
+        .header-title .icon { font-size: 1.5rem; }
+        
+        .toggle-arrow { font-size: 1rem; transition: transform 0.3s ease; }
+        .main-card.active .toggle-arrow, .sub-card.active .toggle-arrow { transform: rotate(180deg); }
 
-        .toggle-arrow {
-            font-size: 1rem;
-            transition: transform 0.3s ease;
-        }
-
-        .main-card.active .toggle-arrow {
-            transform: rotate(180deg);
-        }
-
-        .card-body {
+        .card-body, .sub-card-body {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
@@ -167,48 +141,120 @@
         }
 
         .main-card.active .card-body {
-            max-height: 5000px;
+            max-height: 18000px;
             transition: max-height 0.6s ease-in-out;
             border-top: 1px solid #ECEFF1;
         }
 
-        .card-content {
-            padding: 28px;
-            color: #37474F;
-            font-size: 0.98rem;
-            line-height: 1.7;
+        .sub-card.active .sub-card-body {
+            max-height: 5000px;
+            transition: max-height 0.5s ease-in-out;
+            border-top: 1px solid #E0E0E0;
+            background: #ffffff;
         }
 
-        /* ====================================================
-           ESTILOS INTERNOS DE CONTENIDO E IMÁGENES
-           ==================================================== */
-        h3 {
-            color: var(--sena-verde);
-            font-size: 1.15rem;
-            margin: 20px 0 10px;
+        .card-content { padding: 28px; color: #37474F; font-size: 0.98rem; line-height: 1.7; }
+        .sub-card-content { padding: 20px; }
+
+        /* ELEMENTOS FORMULARIO E INTERACTIVOS */
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--sena-gris); }
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #CFD8DC;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            background: #ffffff;
+        }
+        .form-control:focus { outline: none; border-color: var(--sena-verde); box-shadow: 0 0 0 3px rgba(46,125,50,0.1); }
+        textarea.form-control { min-height: 90px; resize: vertical; }
+
+        /* BOTONERAS */
+        .btn-group-custom {
             display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .btn-sena {
+            background: linear-gradient(135deg, var(--sena-verde), #1b5e20);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
             align-items: center;
             gap: 8px;
+            font-size: 0.9rem;
+        }
+        .btn-sena:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(46,125,50,0.3); }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--sena-azul), #0D47A1);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        .btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(21,101,192,0.3); }
+
+        .btn-undo {
+            background: linear-gradient(135deg, #78909C, #455A64);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        .btn-undo:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(69,90,100,0.3); }
+
+        /* GRID DOFA Y DIAGNÓSTICO */
+        .grid-dofa { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 15px; }
+        @media (max-width: 768px) { .grid-dofa { grid-template-columns: 1fr; } }
+
+        .dofa-box {
+            padding: 16px;
+            border-radius: var(--radius-card);
+            background: #ffffff;
+            border: 1px solid #E0E0E0;
+        }
+        .dofa-box.d { border-top: 4px solid #C62828; }
+        .dofa-box.o { border-top: 4px solid #1565C0; }
+        .dofa-box.f { border-top: 4px solid #2E7D32; }
+        .dofa-box.a { border-top: 4px solid #E65100; }
+
+        .dofa-box h5 {
+            font-size: 0.95rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        h3:first-child {
-            margin-top: 0;
-        }
-
-        p {
-            margin-bottom: 12px;
-        }
-
-        ul, ol {
-            margin-left: 22px;
-            margin-bottom: 16px;
-        }
-
-        li {
-            margin-bottom: 6px;
-        }
-
-        /* IMÁGENES DENTRO DE LAS CARDS */
+        /* IMÁGENES DENTRO DE CARDS */
         .card-media {
             margin-top: 25px;
             text-align: center;
@@ -218,182 +264,50 @@
             border: 1px solid #E0E0E0;
             box-shadow: 0 4px 12px rgba(0,0,0,0.04);
         }
+        .card-media img { max-width: 100%; height: auto; border-radius: 8px; display: inline-block; }
+        .card-media figcaption { margin-top: 10px; font-size: 0.85rem; color: #607D8B; font-style: italic; }
 
-        .card-media img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            display: inline-block;
-        }
+        /* CALLOUTS */
+        .callout { background: #E3F2FD; border-left: 5px solid var(--sena-azul); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 18px 0; font-size: 0.95rem; }
+        .callout.alert { background: #FFF3E0; border-left-color: var(--sena-naranja); color: #4E342E; }
+        .callout.warning { background: #FFEBEE; border-left-color: var(--nivel6); color: #3E2723; }
+        .callout.success { background: #E8F5E9; border-left-color: var(--sena-verde); color: #1B5E20; }
+        .callout-title { font-weight: 800; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; text-transform: uppercase; font-size: 0.82rem; letter-spacing: 0.8px; }
 
-        .card-media figcaption {
-            margin-top: 10px;
-            font-size: 0.85rem;
-            color: #607D8B;
-            font-style: italic;
-        }
+        /* COMPARATIVAS Y TABLAS */
+        .grid-comparativa { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        @media (max-width: 768px) { .grid-comparativa { grid-template-columns: 1fr; } }
+        .comp-box { background: #ffffff; border-radius: var(--radius-card); padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); border: 1px solid #E0E0E0; }
+        .comp-box.bloom { border-top: 5px solid var(--sena-azul); }
+        .comp-box.emergente { border-top: 5px solid var(--sena-verde); background: #F9FBE7; }
 
-        /* CAJAS DESTACADAS Y ALERTAS */
-        .callout {
-            background: #E3F2FD;
-            border-left: 5px solid var(--sena-azul);
-            border-radius: 0 8px 8px 0;
-            padding: 16px 20px;
-            margin: 18px 0;
-            font-size: 0.95rem;
-        }
+        .table-responsive { width: 100%; overflow-x: auto; margin: 20px 0; border-radius: var(--radius-card); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .custom-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; background: #ffffff; text-align: left; }
+        .custom-table thead tr { background: linear-gradient(135deg, var(--sena-verde), #1b5e20); color: #ffffff; }
+        .custom-table th, .custom-table td { padding: 14px 18px; border-bottom: 1px solid #ECEFF1; vertical-align: top; }
+        .badge-level { display: inline-block; padding: 4px 10px; border-radius: 20px; color: #ffffff; font-weight: 800; font-size: 0.78rem; white-space: nowrap; }
 
-        .callout.alert {
-            background: #FFF3E0;
-            border-left-color: var(--sena-naranja);
-            color: #4E342E;
-        }
+        .grid-10q { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 768px) { .grid-10q { grid-template-columns: 1fr; } }
 
-        .callout.warning {
-            background: #FFEBEE;
-            border-left-color: var(--nivel6);
-            color: #3E2723;
-        }
-
-        .callout.success {
-            background: #E8F5E9;
-            border-left-color: var(--sena-verde);
-            color: #1B5E20;
-        }
-
-        .callout-title {
-            font-weight: 800;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            text-transform: uppercase;
-            font-size: 0.82rem;
-            letter-spacing: 0.8px;
-        }
-
-        /* COMPARATIVAS ALINEADAS */
-        .grid-comparativa {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        @media (max-width: 768px) {
-            .grid-comparativa {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .comp-box {
-            background: #ffffff;
-            border-radius: var(--radius-card);
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-            border: 1px solid #E0E0E0;
-        }
-
-        .comp-box.bloom {
-            border-top: 5px solid var(--sena-azul);
-        }
-
-        .comp-box.emergente {
-            border-top: 5px solid var(--sena-verde);
-            background: #F9FBE7;
-        }
-
-        .comp-level {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 14px;
-            margin-bottom: 8px;
-            background: #F5F7FA;
-            border-radius: 8px;
-            font-size: 0.9rem;
-        }
-
-        .comp-level.n0-highlight {
-            background: #E0F7FA;
-            border: 2px solid var(--nivel0);
-            font-weight: 800;
-        }
-
-        /* TABLA INTEGRADORA */
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            margin: 20px 0;
-            border-radius: var(--radius-card);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        .custom-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-            background: #ffffff;
-            text-align: left;
-        }
-
-        .custom-table thead tr {
-            background: linear-gradient(135deg, var(--sena-verde), #1b5e20);
-            color: #ffffff;
-        }
-
-        .custom-table th, .custom-table td {
-            padding: 14px 18px;
-            border-bottom: 1px solid #ECEFF1;
-            vertical-align: top;
-        }
-
-        .custom-table tbody tr:hover {
-            background: #F1F8E9;
-        }
-
-        .badge-level {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            color: #ffffff;
-            font-weight: 800;
-            font-size: 0.78rem;
-            white-space: nowrap;
-        }
-
-        /* FOOTER */
-        .footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #CFD8DC;
-            text-align: center;
-            font-size: 0.85rem;
-            color: #78909C;
-        }
-
-        .footer strong {
-            color: var(--sena-verde);
-        }
+        .footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #CFD8DC; text-align: center; font-size: 0.85rem; color: #78909C; }
+        .footer strong { color: var(--sena-verde); }
     </style>
 </head>
 <body>
 
 <div class="container">
 
-    <!-- HEADER INSTITUCIONAL -->
     <header class="header">
         <span class="badge">Soberanía Cognitiva e Investigación Pedagógica SENA</span>
         <h1>Taxonomía Emergente e Investigación con IA</h1>
-        <p>Análisis comparativo, inmersión en el territorio y soberanía crítica del investigador</p>
+        <p>Inmersión en el territorio, refinamiento de preguntas y soberanía crítica del investigador</p>
     </header>
 
-    <!-- CARDS PRINCIPALES (EXACTAMENTE 5) -->
     <div class="cards-wrapper">
 
         <!-- ============================================
-             CARD 1: INVESTIGACIÓN APLICADA E INVESTIGACIÓN PEDAGÓGICA
+             1. INVESTIGACIÓN APLICADA E INVESTIGACIÓN PEDAGÓGICA
              ============================================ -->
         <div class="main-card active">
             <div class="card-header">
@@ -405,38 +319,141 @@
             </div>
             <div class="card-body">
                 <div class="card-content">
-                    
                     <h3>📌 Definición de Rutas, Alcances y Objeto de Estudio</h3>
                     <div class="grid-comparativa">
                         <div class="comp-box bloom">
                             <h4 style="color:var(--sena-azul); margin-bottom:10px;">🔬 Investigación Aplicada</h4>
                             <p><strong>Objeto de estudio:</strong> Problemas técnicos, tecnológicos, socioeconómicos o de un sector productivo/disciplinar específico.</p>
                             <p><strong>Propósito y Alcance:</strong> Crear, probar o perfeccionar productos, prototipos, software, servicios o procesos técnicos concretos.</p>
-                            <p><strong>Observación (Sujeto vs. Objeto):</strong> El investigador observa el problema técnico como un <em>objeto externo</em> desde una postura analítica y neutral para optimizarlo o resolverlo.</p>
+                            <p><strong>Observación:</strong> El investigador observa el problema técnico como un <em>objeto externo</em> desde una postura analítica para optimizarlo.</p>
                         </div>
 
                         <div class="comp-box emergente">
                             <h4 style="color:var(--sena-verde); margin-bottom:10px;">🎓 Investigación Pedagógica</h4>
-                            <p><strong>Objeto de estudio:</strong> Las prácticas de formación, los procesos de aprendizaje, las mediaciones didácticas y el desarrollo de competencias.</p>
-                            <p><strong>Propósito y Alcance:</strong> Transformar la práctica del instructor, comprender cómo se aprende y mejorar la calidad de la Formación Profesional Integral (FPI).</p>
-                            <p><strong>Observación (Sujeto-Sujeto y Autorreflexión):</strong> El instructor forma parte activa del fenómeno. Se observan interacciones humanas entre <em>sujetos cognoscentes</em> y el instructor convierte su propia práctica en objeto de indagación.</p>
+                            <p><strong>Objeto de estudio:</strong> Las prácticas de formación, los procesos de aprendizaje, las mediaciones didácticas y las competencias.</p>
+                            <p><strong>Propósito y Alcance:</strong> Transformar la práctica del instructor, comprender cómo se aprende y mejorar la Formación Profesional Integral (FPI).</p>
+                            <p><strong>Observación:</strong> El instructor forma parte activa del fenómeno. Se observan interacciones entre <em>sujetos cognoscentes</em> y el instructor convierte su práctica en objeto de indagación.</p>
                         </div>
                     </div>
 
                     <div class="callout alert">
                         <div class="callout-title">⚠️ La Pregunta Incómoda: "¿Dónde aparecen los aprendices?"</div>
-                        <p>Existe una debilidad histórica recurrente en centros de formación donde se ejecutan proyectos de investigación aplicada de altísima producción técnica (patentes, registros, prototipos SENNOVA), pero donde los instructores investigan aislados. Al finalizar surge la duda: <em>¿dónde aparecen los aprendices?</em></p>
-                        <p>Si el proyecto técnico no se traslada al ambiente de aprendizaje, a la Guía de Aprendizaje ni a la Formación por Proyectos, se convierte en una consultoría desconectada de la misión institucional. La investigación aplicada solo cobra sentido SENA cuando el problema técnico sirve como <strong>pretexto pedagógico</strong> para desarrollar competencias en el aprendiz.</p>
+                        <p>Ocurre cuando se ejecutan proyectos de investigación aplicada de alta producción técnica (patentes, prototipos SENNOVA), pero los instructores investigan aislados. La investigación aplicada solo cobra sentido SENA cuando el problema técnico sirve como <strong>pretexto pedagógico</strong> para desarrollar competencias en los aprendices.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================
+             2. LA PREGUNTA O INTERÉS DE INVESTIGACIÓN (CON SUB-TOGGLES PASO A Y PASO B)
+             ============================================ -->
+        <div class="main-card">
+            <div class="card-header">
+                <div class="header-title">
+                    <span class="icon">❓</span>
+                    <span>2. La Pregunta o Interés de Investigación</span>
+                </div>
+                <span class="toggle-arrow">▼</span>
+            </div>
+            <div class="card-body">
+                <div class="card-content">
+                    <h3>📚 Fundamentación (Según Hernández Sampieri)</h3>
+                    <p>La pregunta de investigación orienta las respuestas que se buscan y es el motor del proyecto. Debe ser clara, delimitada y exenta de ambigüedades.</p>
+
+                    <div class="grid-comparativa">
+                        <div class="comp-box">
+                            <h4 style="color:var(--sena-naranja);">❌ Lo que NO es una pregunta de investigación</h4>
+                            <ul>
+                                <li>Preguntas de respuesta dicotómica ("SÍ" o "NO").</li>
+                                <li>Juicios de valor moral disfrazados.</li>
+                                <li>Afirmaciones generales sin delimitación espacial/temporal.</li>
+                            </ul>
+                        </div>
+                        <div class="comp-box">
+                            <h4 style="color:var(--sena-verde);">✅ Lo que SÍ es una pregunta de investigación</h4>
+                            <ul>
+                                <li>Delimitada en tiempo, lugar y población específica.</li>
+                                <li>Indaga el *cómo*, *de qué manera*, *relaciones* o *significados*.</li>
+                                <li>Requiere recolección y análisis sistemático de datos reales.</li>
+                            </ul>
+                        </div>
                     </div>
 
-                    <div class="callout warning">
-                        <div class="callout-title">🚨 Riesgos de delegar a la tecnología (Atajo Cognitivo)</div>
-                        <p>Cuando el instructor o aprendiz delega la investigación a la IA generativa, se produce el <strong>"Cognitive Offloading" no reflexivo</strong>:</p>
-                        <ul>
-                            <li><strong>Atrofia del pensamiento crítico:</strong> La IA contrasta variables y redacta; el sujeto solo lee la superficie.</li>
-                            <li><strong>Ilusión de Maestría:</strong> Se entrega un documento sintácticamente complejo, pero el investigador mantiene una estructura mental interna de muy baja complejidad.</li>
-                            <li><strong>Delegación de verbos superiores:</strong> Se le pide a la máquina que analice, evalúe y cree, anulando la apropiación real.</li>
-                        </ul>
+                    <!-- DESPLIEGUE EN DOS SUB-CARDS TIPO TOGGLE -->
+                    <div style="display:flex; flex-direction:column; gap:15px; margin-top:20px;">
+
+                        <!-- SUB-CARD PASO A: PREGUNTA PRELIMINAR -->
+                        <div class="sub-card active">
+                            <div class="sub-card-header">
+                                <div class="sub-header-title">
+                                    <span>✍️ Paso A: Pregunta o Interés Preliminar (Borrador Inicial)</span>
+                                </div>
+                                <span class="toggle-arrow">▼</span>
+                            </div>
+                            <div class="sub-card-body">
+                                <div class="sub-card-content">
+                                    <div class="form-group">
+                                        <label for="preguntaInicial">Escribe tu idea o borrador de pregunta inicial:</label>
+                                        <textarea id="preguntaInicial" class="form-control" placeholder="Ej: ¿Cómo optimizar el proceso de secado de cacaoyal para mejorar la calidad sensorial mediante prototipos solares en Cartago?" oninput="registrarCambioPregunta()"></textarea>
+                                    </div>
+
+                                    <div class="btn-group-custom">
+                                        <button class="btn-sena" onclick="guardarPreguntaInicial()">💾 Guardar Pregunta Inicial</button>
+                                        <button class="btn-secondary" onclick="asistenteIaPregunta()">🤖 Asistente IA (Revisar y Recomendar)</button>
+                                        <button class="btn-undo" onclick="rehacerPreguntaUndo()">↩️ Rehacer Pregunta</button>
+                                    </div>
+                                    <span id="msgInicial" style="display:block; color:var(--sena-verde); font-weight:700; margin-top:5px;"></span>
+
+                                    <!-- RECOMENDACIÓN ASISTENTE IA -->
+                                    <div id="boxRecomendacionIa" style="display:none; margin-top:15px;" class="callout success">
+                                        <div class="callout-title">💡 Diagnóstico y Recomendaciones del Asistente IA (Sampieri)</div>
+                                        <div id="contenidoRecomendacionIa"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SUB-CARD PASO B: DIAGNÓSTICO DOFA -->
+                        <div class="sub-card">
+                            <div class="sub-card-header">
+                                <div class="sub-header-title">
+                                    <span>🧩 Paso B: Diagnóstico Situacional DOFA (Manual / Asistido con IA)</span>
+                                </div>
+                                <span class="toggle-arrow">▼</span>
+                            </div>
+                            <div class="sub-card-body">
+                                <div class="sub-card-content">
+                                    <p style="font-size:0.9rem; color:#546E7A;">Diligencia manualmente estos cuadrantes o pulsa para enriquecerlos con IA. Todos los campos son 100% editables.</p>
+
+                                    <div class="btn-group-custom">
+                                        <button class="btn-secondary" onclick="generarOEnriquecerDofa()">🤖 Generar / Enriquecer DOFA con IA</button>
+                                        <button class="btn-sena" onclick="guardarDofaManual()">💾 Guardar DOFA</button>
+                                        <button class="btn-undo" onclick="rehacerDofaUndo()">↩️ Rehacer DOFA (Ctrl+Z)</button>
+                                    </div>
+                                    <span id="msgDofa" style="display:block; color:var(--sena-azul); font-weight:700; margin-top:5px;"></span>
+
+                                    <div class="grid-dofa">
+                                        <div class="dofa-box d">
+                                            <h5 style="color:#C62828;">🔴 Debilidades (Internas)</h5>
+                                            <textarea id="dofaD" class="form-control" placeholder="Ej: Falta de equipos de medición de humedad en el ambiente..." oninput="registarCambioDofaInput()"></textarea>
+                                        </div>
+                                        <div class="dofa-box o">
+                                            <h5 style="color:#1565C0;">🔵 Oportunidades (Externas)</h5>
+                                            <textarea id="dofaO" class="form-control" placeholder="Ej: Convocatorias SENNOVA para proyectos agroindustriales..." oninput="registarCambioDofaInput()"></textarea>
+                                        </div>
+                                        <div class="dofa-box f">
+                                            <h5 style="color:#2E7D32;">🟢 Fortalezas (Internas)</h5>
+                                            <textarea id="dofaF" class="form-control" placeholder="Ej: Aprendices motivados de la ficha de Agroindustria..." oninput="registarCambioDofaInput()"></textarea>
+                                        </div>
+                                        <div class="dofa-box a">
+                                            <h5 style="color:#E65100;">🟠 Amenazas (Externas)</h5>
+                                            <textarea id="dofaA" class="form-control" placeholder="Ej: Variaciones climáticas extremas en la zona rural..." oninput="registarCambioDofaInput()"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
@@ -444,222 +461,225 @@
         </div>
 
         <!-- ============================================
-             CARD 2: TAXONOMÍA ANTERIOR
+             3. TAXONOMÍA
              ============================================ -->
         <div class="main-card">
             <div class="card-header">
                 <div class="header-title">
                     <span class="icon">📘</span>
-                    <span>2. Taxonomía Anterior</span>
+                    <span>3. Taxonomía</span>
                 </div>
                 <span class="toggle-arrow">▼</span>
             </div>
             <div class="card-body">
                 <div class="card-content">
-                    
                     <h3>🔺 La Taxonomía Tradicional de Bloom (Anderson & Krathwohl)</h3>
-                    <p>Diseñada para el desarrollo progresivo de habilidades cognitivas individuales en una escala ascendente lineal de 6 niveles:</p>
-
-                    <ol>
-                        <li><strong>Recordar:</strong> Recuperar, reconocer, memorizar, listar y definir información explícita.</li>
-                        <li><strong>Comprender:</strong> Clasificar, describir, discutir, explicar e interpretar conceptos.</li>
-                        <li><strong>Aplicar:</strong> Ejecutar, implementar, resolver y utilizar procedimientos en situaciones concretas.</li>
-                        <li><strong>Analizar:</strong> Diferenciar, organizar, relacionar, comparar y examinar estructuras subyacentes.</li>
-                        <li><strong>Evaluar:</strong> Juzgar, argumentar, criticar, seleccionar y valorar bajo criterios determinados.</li>
-                        <li><strong>Crear:</strong> Diseñar, construir, planear, producir y formular un nuevo producto o estructura sintética.</li>
-                    </ol>
-
-                    <div class="callout">
-                        <div class="callout-title">📌 Supuestos de la Era Analógica</div>
-                        <p>La taxonomía de Bloom fue concebida bajo premisas que la IA ha fracturado:</p>
-                        <ul>
-                            <li><strong>El contenido se daba por sentado:</strong> Se asumía un ambiente de formación donde el tema o la formación venía predeterminado en un manual o por el instructor; por eso su base era <em>Recordar</em>.</li>
-                            <li><strong>Desarrollo lineal estricto:</strong> Se asumía que para llegar a crear un texto, la mente humana debía transitar obligatoriamente por la retención y la comprensión previa.</li>
-                            <li><strong>La Falacia del Producto Final ("Crear"):</strong> Se asumía que la entrega de un documento o informe elaborado (*Crear*) era prueba indiscutible de que el aprendiz había alcanzado los niveles cognitivos inferiores. Hoy, la IA puede simular la creación de un informe impecable en segundos sin que el humano haya realizado esfuerzo mental alguno.</li>
-                        </ul>
-                    </div>
-
-                    <!-- IMAGEN ADJUNTA TAXONOMÍA ANTERIOR -->
+                    <p>Escala ascendente lineal de 6 niveles (Recordar, Comprender, Aplicar, Analizar, Evaluar, Crear).</p>
                     <figure class="card-media">
                         <img src="img/taxo1.jpeg" alt="Taxonomía Tradicional de Bloom">
                         <figcaption>Estructura y niveles de la Taxonomía Tradicional de Bloom</figcaption>
                     </figure>
-
                 </div>
             </div>
         </div>
 
         <!-- ============================================
-             CARD 3: TAXONOMÍA EMERGENTE
+             4. TAXONOMÍA EMERGENTE
              ============================================ -->
         <div class="main-card">
             <div class="card-header">
                 <div class="header-title">
                     <span class="icon">🟢</span>
-                    <span>3. Taxonomía Emergente</span>
+                    <span>4. Taxonomía Emergente</span>
                 </div>
                 <span class="toggle-arrow">▼</span>
             </div>
             <div class="card-body">
                 <div class="card-content">
-                    
                     <h3>🔄 Los 7 Niveles para la Investigación con IA (N0 a N6)</h3>
-                    <p>Redefine la soberanía del investigador humano, estableciendo límites claros de delegación:</p>
-
-                    <ul>
-                        <li><strong style="color:var(--nivel0);">N0. Explorar / Situar:</strong> Detectar, contextualizar y explorar la realidad. Inmersión territorial e inyección de contexto.</li>
-                        <li><strong style="color:var(--nivel1);">N1. Formular / Delimitar:</strong> Diagnosticar, plantear la pregunta de investigación, justificar y definir objetivos.</li>
-                        <li><strong style="color:var(--nivel2);">N2. Diseñar / Fundamentar:</strong> Estructurar el marco referencial, la ruta metodológica (Sampieri) y los instrumentos.</li>
-                        <li><strong style="color:var(--nivel3);">N3. Aplicar / Verificar:</strong> Recolectar datos en campo, procesar y auditar la validez y consistencia del dato real.</li>
-                        <li><strong style="color:var(--nivel4);">N4. Interpretar / Comunicar:</strong> Otorgar sentido crítico a los hallazgos, argumentar con voz propia y redactar el reporte.</li>
-                        <li><strong style="color:var(--nivel5);">N5. Evaluar:</strong> Auditar el proyecto en sí mismo, medir impacto, consolidar lecciones aprendidas y proyectar sostenibilidad.</li>
-                        <li><strong style="color:var(--nivel6);">N6. Transferir / Divulgar:</strong> Difundir, socializar, adaptar y garantizar la transferencia real de conocimiento a la comunidad.</li>
-                    </ul>
-
-                    <div class="callout success">
-                        <div class="callout-title">🔑 La Clave Maestra: Por qué el Nivel 0 (N0) es Vital</div>
-                        <p>El <strong>Nivel 0 (Explorar / Situar)</strong> es el diferencial exclusivo y 100% humano de esta taxonomía por tres razones fundamentales:</p>
-                        <ol>
-                            <li><strong>Embodied Cognition (Cognición Situada y Presencia Física):</strong> La IA no tiene cuerpo, no habita el ambiente de formación, la vereda ni el centro de formación. Carece de vivencia física para detectar problemas reales.</li>
-                            <li><strong>Context & Content Engineering (Inyección de Contexto):</strong> <em>"El contexto es el rey"</em>. Los LLM son motores sintácticos; si el humano no inyecta la densidad situacional (restricciones locales, cultura, características de los aprendices), la máquina solo devuelve abstracciones promedio inútiles.</li>
-                            <li><strong>Interrogatorio Metacognitivo y Socratismo Asistido:</strong> N0 es el arte de interrogar a la IA con criterio, usando la herramienta para explorar posibilidades sin ceder jamás la elección de la prioridad pedagógica ni la realidad a transformar.</li>
-                        </ol>
-                    </div>
-
-                    <!-- IMAGEN ADJUNTA TAXONOMÍA EMERGENTE -->
+                    <p>Redefine la soberanía del investigador (N0. Explorar/Situar hasta N6. Transferir/Divulgar).</p>
                     <figure class="card-media">
                         <img src="img/taxo2.jpeg" alt="Taxonomía Emergente para la Investigación con IA">
                         <figcaption>Niveles y soberanía cognitiva de la Taxonomía Emergente para la Investigación con IA</figcaption>
                     </figure>
-
                 </div>
             </div>
         </div>
 
         <!-- ============================================
-             CARD 4: CONTRASTE DE TAXONOMÍAS
+             5. CONTRASTE DE TAXONOMÍAS
              ============================================ -->
         <div class="main-card">
             <div class="card-header">
                 <div class="header-title">
                     <span class="icon">🔺</span>
-                    <span>4. Contraste de Taxonomías</span>
+                    <span>5. Contraste de Taxonomías</span>
                 </div>
                 <span class="toggle-arrow">▼</span>
             </div>
             <div class="card-body">
                 <div class="card-content">
-                    
-                    <h3>📊 Comparación Directa Alineada Nivel a Nivel (Base a Cima)</h3>
-
-                    <div class="grid-comparativa">
-                        <div class="comp-box bloom">
-                            <h4 style="color:var(--sena-azul); margin-bottom:12px;">📘 Taxonomía de Bloom (Tradicional)</h4>
-                            <div class="comp-level" style="opacity:0.4; text-align:center;"><em>(Inexistente en Bloom - Asumía tema dado)</em></div>
-                            <div class="comp-level"><span>1. Recordar</span> <span>Memorizar / Definir</span></div>
-                            <div class="comp-level"><span>2. Comprender</span> <span>Explicar / Clasificar</span></div>
-                            <div class="comp-level"><span>3. Aplicar</span> <span>Ejecutar / Resolver</span></div>
-                            <div class="comp-level"><span>4. Analizar</span> <span>Diferenciar / Organizar</span></div>
-                            <div class="comp-level"><span>5. Evaluar</span> <span>Juzgar / Valorar</span></div>
-                            <div class="comp-level"><span>6. Crear</span> <span>Producir / Elaborar</span></div>
-                        </div>
-
-                        <div class="comp-box emergente">
-                            <h4 style="color:var(--sena-verde); margin-bottom:12px;">🟢 Taxonomía Emergente (Con IA)</h4>
-                            <div class="comp-level n0-highlight"><span>N0. Explorar / Situar</span> <span>★ BASE HUMANA (Inmersión)</span></div>
-                            <div class="comp-level"><span>N1. Formular / Delimitar</span> <span>Pregunta y Objetivos</span></div>
-                            <div class="comp-level"><span>N2. Diseñar / Fundamentar</span> <span>Marco y Ruta Sampieri</span></div>
-                            <div class="comp-level"><span>N3. Aplicar / Verificar</span> <span>Trabajo de Campo y Validez</span></div>
-                            <div class="comp-level"><span>N4. Interpretar / Comunicar</span> <span>Voz Propia y Argumento</span></div>
-                            <div class="comp-level"><span>N5. Evaluar</span> <span>Auditoría de Impacto</span></div>
-                            <div class="comp-level"><span>N6. Transferir / Divulgar</span> <span>Socialización e Impacto Real</span></div>
-                        </div>
-                    </div>
-
-                    <div class="callout alert">
-                        <div class="callout-title">🛡️ Claves de Soberanía Cognitiva y Límites de Delegación</div>
-                        <p>Para evitar la atrofia del pensamiento crítico, el investigador debe aplicar reglas estrictas de no-delegación:</p>
-                        <ul>
-                            <li><strong>En N0/N1:</strong> NO delega la elección del problema ni la intencionalidad ética. La IA sugiere variables, pero el humano decide qué realidad transformar.</li>
-                            <li><strong>En N2/N3:</strong> NO delega la coherencia del diseño ni la comprobación del dato. La IA sintetiza textos o procesa datos, pero el humano audita la veracidad en el territorio.</li>
-                            <li><strong>En N4/N5/N6:</strong> NO delega el sentido crítico, el juicio de impacto ni la autoría. La creación de texto por la máquina no equivale a pensamiento; la firma y la responsabilidad social son indelegables.</li>
-                        </ul>
-                    </div>
-
-                    <!-- IMAGEN ADJUNTA CONTRASTE DE TAXONOMÍAS -->
+                    <h3>📊 Comparación Directa Alineada Nivel a Nivel</h3>
                     <figure class="card-media">
                         <img src="img/piramides.jpeg" alt="Contraste de Taxonomías">
                         <figcaption>Análisis comparativo visual entre la Taxonomía Tradicional y la Taxonomía Emergente</figcaption>
                     </figure>
-
                 </div>
             </div>
         </div>
 
         <!-- ============================================
-             CARD 5: TABLA INTEGRADORA
+             6. TABLA INTEGRADORA
              ============================================ -->
         <div class="main-card">
             <div class="card-header">
                 <div class="header-title">
                     <span class="icon">📊</span>
-                    <span>5. Tabla Integradora</span>
+                    <span>6. Tabla Integradora</span>
                 </div>
                 <span class="toggle-arrow">▼</span>
             </div>
             <div class="card-body">
                 <div class="card-content">
-                    
                     <h3>📋 Consolidado de la Taxonomía Emergente para la Investigación con IA</h3>
-                    <p>Relación sistemática entre Niveles, Claves Metodológicas y Herramientas Idóneas:</p>
-
                     <div class="table-responsive">
                         <table class="custom-table">
                             <thead>
                                 <tr>
-                                    <th style="width: 15%;">Nivel y Verbo</th>
-                                    <th style="width: 45%;">Clave (Soberanía Cognitiva / Principio Metodológico)</th>
-                                    <th style="width: 40%;">Prácticas Aconsejadas y Herramientas Idóneas</th>
+                                    <th>Nivel y Verbo</th>
+                                    <th>Clave (Soberanía Cognitiva / Principio Metodológico)</th>
+                                    <th>Prácticas Aconsejadas y Herramientas Idóneas</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td><span class="badge-level" style="background:var(--nivel0);">N0</span><br><strong>Explorar / Situar</strong></td>
-                                    <td><strong>Inyección de Contexto y Realidad (Context Engineering):</strong> Inmersión territorial. La IA carece de cuerpo y presencia física (Embodied Cognition). El humano aporta la vivencia y la necesidad real.</td>
-                                    <td>Inyectar datos no confidenciales del territorio. Socratismo asistido para explorar ideas sin delegar la elección del problema.<br><em>Herramientas: ChatGPT, Gemini, Perplexity AI, iAsk AI.</em></td>
+                                    <td><strong>Inyección de Contexto (Context Engineering):</strong> Inmersión territorial y presencia física.</td>
+                                    <td>Socratismo asistido sin delegar la elección del problema.<br><em>ChatGPT, Gemini, Perplexity.</em></td>
                                 </tr>
                                 <tr>
                                     <td><span class="badge-level" style="background:var(--nivel1);">N1</span><br><strong>Formular / Delimitar</strong></td>
-                                    <td><strong>La Pregunta como Filtro Ético:</strong> Decidir qué aspecto transformar y asumir la intencionalidad pedagógica y social. Definición de objetivos y justificación.</td>
-                                    <td>Solicitar variantes de preguntas y objetivos para afinar redacción, auditando que respondan al N0. Mapear vacíos de literatura.<br><em>Herramientas: Semantic Scholar, Consensus, Elicit, Litmaps, Scite.ai, ResearchRabbit.</em></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="badge-level" style="background:var(--nivel2);">N2</span><br><strong>Diseñar / Fundamentar</strong></td>
-                                    <td><strong>Coherencia Epistemológica:</strong> Garantizar la alineación entre pregunta, ruta metodológica (Cuanti/Cuali/Mixta según Sampieri) e instrumentos de recolección.</td>
-                                    <td>Revisión sistemática de literatura, matrices de antecedentes y borradores de ítems para encuestas. Auditar coherencia interna.<br><em>Herramientas: Elicit, Consensus, ChatPDF, Humata, Qualtrics/Typeform (IA), Notion AI.</em></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="badge-level" style="background:var(--nivel3);">N3</span><br><strong>Aplicar / Verificar</strong></td>
-                                    <td><strong>Validez en Campo:</strong> Aunque la IA procese o transcriba grandes volúmenes de información, el juicio sobre la veracidad del dato recae en el humano.</td>
-                                    <td>Transcripción automatizada de entrevistas, procesamiento previo de datos y codificación cualitativa inicial. Auditar consistencia.<br><em>Herramientas: Otter.ai, Fireflies.ai, Dovetail, NVivo (IA), Julius AI, MS Copilot.</em></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="badge-level" style="background:var(--nivel4);">N4</span><br><strong>Interpretar / Comunicar</strong></td>
-                                    <td><strong>Sentido Crítico y Voz Propia:</strong> La IA procesa sintaxis y busca patrones; el investigador otorga significado profundo, confrontación teórica y postura.</td>
-                                    <td>Solicitar contraargumentos y revisiones de estilo académico. Confrontar hallazgos de la IA con el marco teórico y la realidad.<br><em>Herramientas: Julius AI, Dovetail, Paperpal, Trinka, Zotero, Quillbot, Gamma, Tome.</em></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="badge-level" style="background:var(--nivel5);">N5</span><br><strong>Evaluar</strong></td>
-                                    <td><strong>Juicio de Impacto y Sostenibilidad:</strong> Auditar los resultados del proyecto en sí mismo: lecciones aprendidas, viabilidad y proyección en la comunidad.</td>
-                                    <td>Estructurar tableros de evaluación, consolidar lecciones aprendidas y simular escenarios. La decisión estratégica es 100% humana.<br><em>Herramientas: Julius AI, Notion AI, MS Copilot, ChatGPT / Claude (reflexión guiada).</em></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="badge-level" style="background:var(--nivel6);">N6</span><br><strong>Transferir / Divulgar</strong></td>
-                                    <td><strong>Responsabilidad Social y Autoría:</strong> La firma, el compromiso ético ante la sociedad y la transferencia real de valor al territorio residen en el investigador.</td>
-                                    <td>Diagramación de infografías, resúmenes divulgativos, traducción asistida y ponencias. Declaración ética de uso de IA.<br><em>Herramientas: Paperpal, Canva IA, Midjourney, DALL-E, DeepL, ResearchGate.</em></td>
+                                    <td><strong>La Pregunta como Filtro Ético:</strong> Decidir qué aspecto transformar.</td>
+                                    <td>Afinar objetivos y preguntas.<br><em>Consensus, Elicit, Litmaps, Scite.ai.</em></td>
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================
+             7. REFINAMIENTO, MARCO LÓGICO Y RUTA METODOLÓGICA
+             ============================================ -->
+        <div class="main-card">
+            <div class="card-header">
+                <div class="header-title">
+                    <span class="icon">🚀</span>
+                    <span>7. Refinamiento y Ruta Metodológica en Contexto Real</span>
+                </div>
+                <span class="toggle-arrow">▼</span>
+            </div>
+            <div class="card-body">
+                <div class="card-content">
+                    <h3>🔄 Inmersión Territorial, Mapa de Actores y Árbol de Problemas (EML)</h3>
+                    <p>Integramos la <strong>Pregunta Inicial</strong> y la <strong>Matriz DOFA</strong> (del Punto 2) con un diagnóstico de 10 variables estructurado en Lógica de Marco Lógico para generar tu pregunta refinada y ruta metodológica.</p>
+
+                    <div class="grid-comparativa">
+                        <div class="comp-box">
+                            <h4 style="color:var(--sena-naranja);">📝 Insumos Iniciales (Punto 2)</h4>
+                            <p><strong>Pregunta Inicial:</strong></p>
+                            <div id="displayP2Pregunta" style="font-style:italic; padding:8px; background:#F5F7FA; border-radius:6px; margin-bottom:10px;">(No ingresada)</div>
+                            <p><strong>DOFA Consolidada:</strong></p>
+                            <div id="displayP2Dofa" style="font-size:0.85rem; padding:8px; background:#F5F7FA; border-radius:6px;">(No diligenciada)</div>
+                        </div>
+
+                        <div class="comp-box emergente">
+                            <h4 style="color:var(--sena-verde);">🎯 Diagnóstico Situacional de 10 Variables (N0)</h4>
+                            <p style="font-size:0.9rem;">Responde o ajusta estas 10 preguntas organizadas por EML (Actores, Causas, Efectos, Entorno):</p>
+                        </div>
+                    </div>
+
+                    <div class="callout warning">
+                        <div class="callout-title">📋 Interrogatorio de Caracterización Territorial (10 Variables)</div>
+
+                        <div class="grid-10q" style="margin-top:15px;">
+                            <div class="form-group">
+                                <label>1. Mapa de Actores Afectados / Beneficiarios:</label>
+                                <input type="text" id="q1" class="form-control" placeholder="Ej: 22 aprendices de Mantenimiento / 15 mujeres cacaoteras">
+                            </div>
+
+                            <div class="form-group">
+                                <label>2. Actores Aliados / Instituciones del Entorno:</label>
+                                <input type="text" id="q2" class="form-control" placeholder="Ej: Comité de Cafeteros / Alcaldía de Cartago / Grupo SENNOVA">
+                            </div>
+
+                            <div class="form-group">
+                                <label>3. Problema Central (Tronco del Árbol):</label>
+                                <input type="text" id="q3" class="form-control" placeholder="Ej: Pérdida de calidad en poscosecha por secado deficiente">
+                            </div>
+
+                            <div class="form-group">
+                                <label>4. Causas Raíz Técnicas/Sociales (Raíces):</label>
+                                <input type="text" id="q4" class="form-control" placeholder="Ej: Control empírico de temperatura y falta de equipos automatizados">
+                            </div>
+
+                            <div class="form-group">
+                                <label>5. Efectos Directos Negativos (Ramas):</label>
+                                <input type="text" id="q5" class="form-control" placeholder="Ej: Castigo en precio de venta y baja motivación de los aprendices">
+                            </div>
+
+                            <div class="form-group">
+                                <label>6. Propósito Metodológico Principal:</label>
+                                <select id="q6" class="form-control">
+                                    <option value="cuali">Cualitativo: Comprender percepciones, saberes locales o vivencias</option>
+                                    <option value="cuanti">Cuantitativo: Medir rendimiento técnico, variables o eficiencias</option>
+                                    <option value="mixto">Mixto: Diseñar/validar solución técnica y evaluar impacto humano</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>7. Involucramiento y Rol de los Aprendices:</label>
+                                <select id="q7" class="form-control">
+                                    <option value="Toda la ficha vía Proyecto Formativo integral">Toda la ficha vía Proyecto Formativo integral</option>
+                                    <option value="Grupo focalizado vía Semillero de Investigación SENNOVA">Grupo focalizado vía Semillero de Investigación SENNOVA</option>
+                                    <option value="Aprendices como coinvestigadores de campo en la comunidad">Aprendices como coinvestigadores de campo en la comunidad</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>8. Método de Recolección de Datos en Campo:</label>
+                                <select id="q8" class="form-control">
+                                    <option value="Pruebas de laboratorio, medición técnica e instrumental">Pruebas de laboratorio, medición técnica e instrumental</option>
+                                    <option value="Entrevistas semiestructuradas y diarios de campo">Entrevistas semiestructuradas y diarios de campo</option>
+                                    <option value="Encuestas estructuradas, grupos focales y talleres participativos">Encuestas estructuradas, grupos focales y talleres participativos</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>9. Restricciones Técnicas/Territoriales:</label>
+                                <input type="text" id="q9" class="form-control" placeholder="Ej: Conectividad intermitente en finca / Presupuesto limitado">
+                            </div>
+
+                            <div class="form-group">
+                                <label>10. Entregable Tangible y Transferencia Didáctica:</label>
+                                <input type="text" id="q10" class="form-control" placeholder="Ej: Prototipo de secador automatizado + Guía de aprendizaje">
+                            </div>
+                        </div>
+
+                        <button class="btn-sena" onclick="procesarRefinamientoV1()" style="margin-top:15px;">⚡ Ensamble de Pregunta Refinada y Ruta Metodológica (V1)</button>
+                    </div>
+
+                    <div id="resultadoRefinamiento" style="display:none; margin-top:25px;">
+                        <div class="comp-box emergente" style="margin-bottom:20px;">
+                            <h4 style="color:var(--sena-verde); margin-bottom:10px;">🎯 Tu Pregunta Refinada e Inyectada con Contexto Real (N0)</h4>
+                            <div id="displayPreguntaRefinada" style="font-weight:700; font-size:1.05rem; color:#1B5E20; padding:15px; background:#E8F5E9; border-radius:8px; border-left:5px solid var(--sena-verde);"></div>
+                        </div>
+
+                        <div class="callout success">
+                            <div class="callout-title">📐 Diagnóstico de Marco Lógico y Ruta Metodológica Sugerida</div>
+                            <div id="contenidoRutaDiag"></div>
+                        </div>
                     </div>
 
                 </div>
@@ -668,7 +688,6 @@
 
     </div>
 
-    <!-- FOOTER INSTITUCIONAL -->
     <footer class="footer">
         <p><strong>Taxonomía Emergente e Investigación con IA</strong> · Sistema de Soberanía Cognitiva</p>
         <p>Enfoque de Investigación Pedagógica y Aplicada SENA · 2026</p>
@@ -677,28 +696,244 @@
 </div>
 
 <script>
-    // ====================================================
-    // LÓGICA INTERACTIVA TOGGLE / ACORDEÓN
-    // ====================================================
-    document.addEventListener('DOMContentLoaded', function() {
-        const cards = document.querySelectorAll('.main-card');
+    // HISTORIALES Y ESTADOS (CTRL+Z)
+    let preguntaHistory = [];
+    let dofaHistory = [];
+    let debounceTimerP = null;
+    let debounceTimerD = null;
 
-        cards.forEach(card => {
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggles Cards Principales
+        const mainCards = document.querySelectorAll('.main-card');
+        mainCards.forEach(card => {
             const header = card.querySelector('.card-header');
-            
             header.addEventListener('click', () => {
                 const isActive = card.classList.contains('active');
-
-                // Cierra las demás cards para mantener acordeón limpio (opcional)
-                cards.forEach(c => c.classList.remove('active'));
-
-                // Si no estaba activa, la activa
-                if (!isActive) {
-                    card.classList.add('active');
-                }
+                mainCards.forEach(c => c.classList.remove('active'));
+                if (!isActive) card.classList.add('active');
             });
         });
+
+        // Toggles Sub-Cards del Punto 2
+        const subCards = document.querySelectorAll('.sub-card');
+        subCards.forEach(sub => {
+            const subHeader = sub.querySelector('.sub-card-header');
+            subHeader.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evitar cerrar la card principal
+                sub.classList.toggle('active');
+            });
+        });
+
+        // Registrar estados iniciales
+        guardarEstadoPregunta();
+        guardarEstadoDofa();
     });
+
+    /* ====================================================
+       LÓGICA PASO A: PREGUNTA PRELIMINAR
+       ==================================================== */
+    function guardarEstadoPregunta() {
+        const val = document.getElementById('preguntaInicial').value;
+        if (preguntaHistory.length === 0 || preguntaHistory[preguntaHistory.length - 1] !== val) {
+            preguntaHistory.push(val);
+        }
+    }
+
+    function registrarCambioPregunta() {
+        clearTimeout(debounceTimerP);
+        debounceTimerP = setTimeout(() => {
+            guardarEstadoPregunta();
+            actualizarVistaPunto7();
+        }, 1000);
+    }
+
+    function guardarPreguntaInicial() {
+        guardarEstadoPregunta();
+        actualizarVistaPunto7();
+        document.getElementById('msgInicial').innerText = '✓ Pregunta preliminar guardada correctamente.';
+        setTimeout(() => { document.getElementById('msgInicial').innerText = ''; }, 3500);
+    }
+
+    function rehacerPreguntaUndo() {
+        if (preguntaHistory.length > 1) {
+            preguntaHistory.pop();
+            const prev = preguntaHistory[preguntaHistory.length - 1];
+            document.getElementById('preguntaInicial').value = prev;
+            actualizarVistaPunto7();
+            document.getElementById('msgInicial').innerText = '↩️ Pregunta rehecha al estado anterior.';
+        } else {
+            document.getElementById('msgInicial').innerText = 'ℹ️ Estás en la pregunta inicial.';
+        }
+        setTimeout(() => { document.getElementById('msgInicial').innerText = ''; }, 3500);
+    }
+
+    function asistenteIaPregunta() {
+        const txt = document.getElementById('preguntaInicial').value.trim();
+        if(!txt) {
+            alert('Por favor redacta un borrador de pregunta primero.');
+            return;
+        }
+
+        let recomendacion = "";
+        if (txt.toLowerCase().startsWith('¿cómo') || txt.toLowerCase().startsWith('¿de qué manera')) {
+            recomendacion = `
+                <p><strong>✅ Buen inicio:</strong> La pregunta utiliza un conector abierto adecuado para investigación científica.</p>
+                <p><strong>📌 Sugerencia de delimitación (Sampieri):</strong> Verifica que tu pregunta incluya explícitamente:
+                <ul>
+                    <li>Población o sujeto concreto (ej. <em>aprendices de la ficha X, pequeños productores</em>).</li>
+                    <li>Ubicación geográfica o ambiente (ej. <em>en el Centro de Tecnologías Agroindustriales - Cartago</em>).</li>
+                    <li>Relación entre la variable técnica y el impacto esperado.</li>
+                </ul></p>
+            `;
+        } else {
+            recomendacion = `
+                <p><strong>⚠️ Ajuste de conector recomendado:</strong> Tu pregunta actual parece cerrada o general.</p>
+                <p><strong>💡 Sugerencia:</strong> Transforma el inicio por fórmulas como: <em>"¿De qué manera el desarrollo de [solución] incide en [problemática]..."</em> o <em>"¿Cómo optimizar [proceso] mediante [tecnología/estrategia] en [contexto real]?"</em>.</p>
+            `;
+        }
+
+        document.getElementById('contenidoRecomendacionIa').innerHTML = recomendacion;
+        document.getElementById('boxRecomendacionIa').style.display = 'block';
+    }
+
+    /* ====================================================
+       LÓGICA PASO B: DIAGNÓSTICO DOFA
+       ==================================================== */
+    function getDofaCurrentState() {
+        return {
+            d: document.getElementById('dofaD').value,
+            o: document.getElementById('dofaO').value,
+            f: document.getElementById('dofaF').value,
+            a: document.getElementById('dofaA').value
+        };
+    }
+
+    function guardarEstadoDofa() {
+        const state = getDofaCurrentState();
+        if (dofaHistory.length > 0) {
+            const last = dofaHistory[dofaHistory.length - 1];
+            if (last.d === state.d && last.o === state.o && last.f === state.f && last.a === state.a) return;
+        }
+        dofaHistory.push(state);
+    }
+
+    function registarCambioDofaInput() {
+        clearTimeout(debounceTimerD);
+        debounceTimerD = setTimeout(() => {
+            guardarEstadoDofa();
+            actualizarVistaPunto7();
+        }, 1000);
+    }
+
+    function guardarDofaManual() {
+        guardarEstadoDofa();
+        actualizarVistaPunto7();
+        document.getElementById('msgDofa').innerText = '✓ Matriz DOFA guardada y sincronizada con el Punto 7.';
+        setTimeout(() => { document.getElementById('msgDofa').innerText = ''; }, 3500);
+    }
+
+    function rehacerDofaUndo() {
+        if (dofaHistory.length > 1) {
+            dofaHistory.pop();
+            const prev = dofaHistory[dofaHistory.length - 1];
+            document.getElementById('dofaD').value = prev.d;
+            document.getElementById('dofaO').value = prev.o;
+            document.getElementById('dofaF').value = prev.f;
+            document.getElementById('dofaA').value = prev.a;
+            actualizarVistaPunto7();
+            document.getElementById('msgDofa').innerText = '↩️ Cambios DOFA rehechos al estado anterior.';
+        } else {
+            document.getElementById('msgDofa').innerText = 'ℹ️ Estás en el estado inicial del DOFA.';
+        }
+        setTimeout(() => { document.getElementById('msgDofa').innerText = ''; }, 3500);
+    }
+
+    function generarOEnriquecerDofa() {
+        guardarEstadoDofa();
+        let dCur = document.getElementById('dofaD').value.trim();
+        let oCur = document.getElementById('dofaO').value.trim();
+        let fCur = document.getElementById('dofaF').value.trim();
+        let aCur = document.getElementById('dofaA').value.trim();
+
+        document.getElementById('dofaD').value = dCur ? `${dCur}\n• Limitado tiempo de dedicación directa para prototipado en ambiente` : `• Falta de equipos automatizados de medición directa\n• Poca experiencia previa de los aprendices en rigor metodológico`;
+        document.getElementById('dofaO').value = oCur ? `${oCur}\n• Articulación con convocatorias SENNOVA y semilleros de investigación` : `• Disponibilidad de convocatorias SENNOVA de investigación aplicada\n• Alianzas estratégicas con asociaciones de productores locales`;
+        document.getElementById('dofaF').value = fCur ? `${fCur}\n• Acompañamiento técnico de instructores del Centro de Formación` : `• Instructores con alto conocimiento técnico disciplinar\n• Motivación de los aprendices por resolver problemas reales de su entorno`;
+        document.getElementById('dofaA').value = aCur ? `${aCur}\n• Tiempos ajustados del calendario académico del programa de formación` : `• Cambios climáticos o ambientales impredecibles en campo\n• Fluctuación de precios de insumos tecnológicos en el mercado`;
+
+        guardarEstadoDofa();
+        document.getElementById('msgDofa').innerText = '🤖 DOFA enriquecida con IA. Puedes guardar o deshacer cambios.';
+        actualizarVistaPunto7();
+        setTimeout(() => { document.getElementById('msgDofa').innerText = ''; }, 3500);
+    }
+
+    /* ====================================================
+       SINCRONIZACIÓN Y ENSAMBLE DEL PUNTO 7
+       ==================================================== */
+    function actualizarVistaPunto7() {
+        const pInit = document.getElementById('preguntaInicial').value.trim() || "(Aún no has ingresado tu pregunta inicial en el Punto 2)";
+        document.getElementById('displayP2Pregunta').innerText = pInit;
+
+        const d = document.getElementById('dofaD').value.trim();
+        const o = document.getElementById('dofaO').value.trim();
+        const f = document.getElementById('dofaF').value.trim();
+        const a = document.getElementById('dofaA').value.trim();
+
+        if(d || o || f || a) {
+            document.getElementById('displayP2Dofa').innerHTML = `<strong>D:</strong> ${d.substring(0,30)}... | <strong>F:</strong> ${f.substring(0,30)}...`;
+        } else {
+            document.getElementById('displayP2Dofa').innerText = "(DOFA pendiente de diligenciar en Punto 2)";
+        }
+    }
+
+    function procesarRefinamientoV1() {
+        actualizarVistaPunto7();
+
+        const q1 = document.getElementById('q1').value.trim() || "los aprendices y la comunidad";
+        const q2 = document.getElementById('q2').value.trim() || "actores del sector productivo";
+        const q3 = document.getElementById('q3').value.trim() || "necesidad o falla técnica identificada";
+        const q4 = document.getElementById('q4').value.trim() || "causas de control empírico o falta de tecnología";
+        const q5 = document.getElementById('q5').value.trim() || "baja eficiencia o impacto en el aprendizaje";
+        const q6 = document.getElementById('q6').value;
+        const q7 = document.getElementById('q7').value;
+        const q8 = document.getElementById('q8').value;
+        const q9 = document.getElementById('q9').value.trim() || "restricciones de tiempo o conectividad";
+        const q10 = document.getElementById('q10').value.trim() || "solución técnica didactizada";
+
+        let prefijo = (q6 === 'cuali') ? "¿De qué manera la caracterización cualitativa de" : (q6 === 'cuanti') ? "¿En qué medida la evaluación experimental de" : "¿Cómo el desarrollo e implementación de";
+        let preguntaEnsamblada = `${prefijo} '${q3}', abordando las causas de '${q4}' junto con ${q1} y ${q2}, permite mitigar '${q5}' mediante ${q10}?`;
+
+        document.getElementById('displayPreguntaRefinada').innerText = preguntaEnsamblada;
+
+        let enfoque = "", metodo = "", instrumentos = "";
+
+        if(q6 === 'cuali') {
+            enfoque = "Cualitativo (Enfoque Interpretativo / Hermenéutico)";
+            metodo = "Investigación-Acción Pedagógica (IAPed) / Estudio de Caso";
+            instrumentos = "Diarios de campo, guiones de entrevista semiestructurada, matrices de categorización cualitativa.";
+        } else if(q6 === 'cuanti') {
+            enfoque = "Cuantitativo (Enfoque Empírico-Analítico)";
+            metodo = "Descriptivo - Comparativo o Desarrollo Tecnológico Aplicado";
+            instrumentos = "Rúbricas estandarizadas, fichas de registro técnico de laboratorio, encuestas con escala Likert.";
+        } else {
+            enfoque = "Mixto (Diseño Concurrente o Secuencial TRIANGULADO)";
+            metodo = "Investigación-Acción Aplicada y Didactizada";
+            instrumentos = "Protocolos de pruebas técnicas + Guiones de grupos focales reflexivos con aprendices e instructores.";
+        }
+
+        const htmlRuta = `
+            <p><strong>🔹 Enfoque de Investigación:</strong> ${enfoque}</p>
+            <p><strong>🔹 Método / Alcance Recomendado:</strong> ${metodo}</p>
+            <p><strong>🔹 Articulación con Aprendices y Ficha:</strong> ${q7}</p>
+            <p><strong>🔹 Técnicas e Instrumentos en Campo:</strong> ${q8} (${instrumentos})</p>
+            <p><strong>🔹 Árbol de Problemas (EML):</strong> Causa: <em>${q4}</em> → Problema Central: <em>${q3}</em> → Efecto: <em>${q5}</em></p>
+            <p><strong>🔹 Entregable y Transferencia Didáctica:</strong> ${q10} (superando la restricción de ${q9})</p>
+            <hr style="margin:15px 0; border:none; border-top:1px solid #C8E6C9;">
+            <p style="font-size:0.9rem; color:#2E7D32;"><strong>💡 Siguiente Fase (V2):</strong> En la versión V1 el sistema ensambla el prompt con lógica determinista. Cuando activemos la API Key, un modelo LLM tomará este árbol de problemas + la DOFA del Punto 2 para redactar el planteamiento con elegancia académica profesional.</p>
+        `;
+
+        document.getElementById('contenidoRutaDiag').innerHTML = htmlRuta;
+        document.getElementById('resultadoRefinamiento').style.display = 'block';
+    }
 </script>
 
 </body>
