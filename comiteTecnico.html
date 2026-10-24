@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comité Técnico de Centro 2027 - SENA CTA Cartago</title>
+  
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM - CSS VARIABLES
+       ========================================================================== */
+    :root {
+      /* Color Palette */
+      --bg-main: #E5E7EB;
+      --bg-card: #FFFFFF;
+      --bg-sidebar: #FFFFFF;
+
+      --brand-primary: #0A3D28;
+      --brand-primary-hover: #06291B;
+      --brand-secondary: #00C853;
+      --brand-accent-red: #E53935;
+      --brand-accent-red-hover: #D32F2F;
+      --brand-positive: #55E063;
+      --brand-light-green: #CDE8DC;
+
+      --text-primary: #1E293B;
+      --text-secondary: #64748B;
+      --text-muted: #94A3B8;
+      --text-placeholder: #64748B;
+      --text-inverse: #FFFFFF;
+
+      --border-default: #E2E8F0;
+      --border-focus: #0A3D28;
+      --border-input: #CBD5E1;
+
+      /* Component Tokens */
+      --radius-button: 12px;
+      --radius-pill: 9999px;
+      --radius-card: 20px;
+      --radius-input: 16px;
+
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 12px rgba(10, 61, 40, 0.08);
+      --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08);
+
+      --transition-fast: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Reset Global */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      line-height: 1.5;
+      padding: 2rem 1rem;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* Header Institucional */
+    .header-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      padding: 2rem 2.5rem;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-default);
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .header-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 100%;
+      background: var(--brand-primary);
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header-title-group {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .sena-badge {
+      background-color: var(--brand-primary);
+      color: var(--text-inverse);
+      font-weight: 800;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sena-badge span {
+      background: var(--brand-secondary);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .header-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--brand-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .header-subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      max-width: 950px;
+    }
+
+    /* Barra de Controles e Interacción */
+    .controls-bar {
+      background: var(--bg-card);
+      border-radius: var(--radius-pill);
+      padding: 0.75rem 1.25rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-default);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 280px;
+      max-width: 550px;
+    }
+
+    .search-input {
+      width: 100%;
+      background-color: var(--bg-main);
+      border: 1px solid var(--border-input);
+      border-radius: var(--radius-pill);
+      padding: 0.6rem 1rem 0.6rem 2.6rem;
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: var(--transition-fast);
+    }
+
+    .search-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(10, 61, 40, 0.15);
+      background-color: var(--bg-card);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      fill: var(--text-muted);
+    }
+
+    .button-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* Botones y Badges */
+    .btn-primary {
+      background-color: var(--brand-primary);
+      color: var(--text-inverse);
+      border-radius: var(--radius-button);
+      padding: 10px 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition-fast);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--brand-primary-hover);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--brand-primary);
+      border-radius: var(--radius-button);
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 1px solid var(--brand-primary);
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(10, 61, 40, 0.05);
+    }
+
+    .pill-badge {
+      border-radius: var(--radius-pill);
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .pill-badge.positive {
+      background-color: var(--brand-positive);
+      color: var(--brand-primary);
+    }
+
+    .pill-badge.negative {
+      background-color: var(--brand-accent-red);
+      color: var(--text-inverse);
+    }
+
+    .pill-badge.neutral {
+      background-color: var(--border-default);
+      color: var(--text-secondary);
+    }
+
+    .pill-badge.brand {
+      background-color: var(--brand-primary);
+      color: var(--text-inverse);
+    }
+
+    .pill-badge.accent {
+      background-color: rgba(0, 200, 83, 0.15);
+      color: var(--brand-primary);
+      border: 1px solid var(--brand-secondary);
+    }
+
+    /* Estructura de Cards Toggle */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .toggle-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      border: 1px solid var(--border-default);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: var(--transition-fast);
+    }
+
+    .toggle-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--border-input);
+    }
+
+    .toggle-card.active {
+      border-color: var(--brand-primary);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .card-header {
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      background-color: var(--bg-card);
+      transition: background-color var(--transition-fast);
+    }
+
+    .toggle-card.active .card-header {
+      background-color: rgba(10, 61, 40, 0.02);
+      border-bottom: 1px solid var(--border-default);
+    }
+
+    .card-header-left {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .card-number {
+      width: 42px;
+      height: 42px;
+      background-color: rgba(10, 61, 40, 0.08);
+      color: var(--brand-primary);
+      font-weight: 800;
+      font-size: 1.15rem;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .toggle-card.active .card-number {
+      background-color: var(--brand-primary);
+      color: var(--text-inverse);
+    }
+
+    .card-title-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .card-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .card-header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .toggle-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background-color: var(--bg-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform var(--transition-fast);
+    }
+
+    .toggle-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--text-primary);
+      transition: transform var(--transition-fast);
+    }
+
+    .toggle-card.active .toggle-icon {
+      background-color: var(--brand-primary);
+    }
+
+    .toggle-card.active .toggle-icon svg {
+      fill: var(--text-inverse);
+      transform: rotate(180deg);
+    }
+
+    .card-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+      background-color: var(--bg-card);
+    }
+
+    .toggle-card.active .card-body {
+      max-height: 6000px;
+      transition: max-height 0.6s ease-in-out;
+    }
+
+    .card-content {
+      padding: 2rem 2.25rem;
+    }
+
+    /* CARD 1: PORTAFOLIO DE SERVICIOS */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .portfolio-card {
+      background: #F8FAFC;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-input);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: var(--transition-fast);
+    }
+
+    .portfolio-card:hover {
+      border-color: var(--brand-secondary);
+      background: #FFFFFF;
+      box-shadow: var(--shadow-md);
+    }
+
+    .portfolio-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .portfolio-card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--brand-primary);
+      line-height: 1.3;
+    }
+
+    .portfolio-card-body {
+      font-size: 0.925rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .portfolio-card-footer {
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--border-default);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* CARD 2: RADAR CHART ANCHO TOTAL Y MATRIZ INTEGRADORA */
+    .radar-full-box {
+      background: #F8FAFC;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-input);
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .radar-chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 850px;
+      height: 480px;
+      margin: 0 auto;
+    }
+
+    /* Tablas Estilizadas */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid var(--border-default);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .matriz-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: var(--bg-card);
+      font-size: 0.88rem;
+      text-align: left;
+    }
+
+    .matriz-table th {
+      background-color: var(--brand-primary);
+      color: var(--text-inverse);
+      padding: 14px 18px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    .matriz-table td {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border-default);
+      color: var(--text-primary);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    .matriz-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .matriz-table tr:hover {
+      background-color: rgba(10, 61, 40, 0.02);
+    }
+
+    .cat-tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: rgba(10, 61, 40, 0.08);
+      color: var(--brand-primary);
+      white-space: nowrap;
+    }
+
+    .actors-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.35rem;
+    }
+
+    .actor-chip {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      background: var(--bg-main);
+      color: var(--text-secondary);
+      border-radius: 6px;
+    }
+
+    /* SUB-TOGGLE BUTTONS PARA CARD 3 */
+    .sub-toggle-bar {
+      display: flex;
+      gap: 0.75rem;
+      background: #F1F5F9;
+      padding: 0.5rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-default);
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .sub-toggle-btn {
+      flex: 1;
+      min-width: 180px;
+      padding: 0.65rem 1.25rem;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      text-align: center;
+    }
+
+    .sub-toggle-btn.active {
+      background: var(--brand-primary);
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sub-content-panel {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .sub-content-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* DOFA Grid y Subcards */
+    .dofa-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .dofa-box {
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid var(--border-default);
+      background: #F8FAFC;
+    }
+
+    .dofa-box.fortal { border-top: 5px solid var(--brand-secondary); }
+    .dofa-box.oport { border-top: 5px solid var(--brand-primary); }
+    .dofa-box.debil { border-top: 5px solid #F59E0B; }
+    .dofa-box.amena { border-top: 5px solid var(--brand-accent-red); }
+
+    .dofa-box h4 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .dofa-box ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .dofa-box ul li {
+      position: relative;
+      padding-left: 1.25rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .dofa-box ul li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+      color: var(--brand-primary);
+    }
+
+    /* CARD 4: VENN CANVAS Y TABLA DE DIRECCIONADORES */
+    .venn-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #F8FAFC;
+      border-radius: var(--radius-input);
+      border: 1px solid var(--border-default);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    #vennCanvas {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .plan-tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .direccionador-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-default);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .direccionador-header {
+      border-bottom: 2px solid var(--brand-primary);
+      padding-bottom: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .direccionador-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--brand-primary);
+    }
+
+    .tendencias-list {
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .tendencias-item {
+      background: #F8FAFC;
+      border-left: 3px solid var(--brand-secondary);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    /* Reusable Grid layout for text cards */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .info-box {
+      background: #F8FAFC;
+      border-left: 4px solid var(--brand-primary);
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+
+    .info-box.accent {
+      border-left-color: var(--brand-secondary);
+    }
+
+    .info-box.red {
+      border-left-color: var(--brand-accent-red);
+    }
+
+    .info-box.warning {
+      border-left-color: #F59E0B;
+    }
+
+    .info-box h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--brand-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .info-box p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Card 5 Gratitud */
+    .thanks-banner {
+      background: linear-gradient(135deg, rgba(10,61,40,0.05) 0%, rgba(0,200,83,0.1) 100%);
+      border: 2px solid var(--brand-secondary);
+      border-radius: var(--radius-card);
+      padding: 2.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .thanks-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--brand-primary);
+    }
+
+    .thanks-desc {
+      font-size: 1.05rem;
+      color: var(--text-primary);
+      max-width: 900px;
+      line-height: 1.7;
+    }
+
+    .thanks-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Media Queries Responsive */
+    @media (max-width: 768px) {
+      body { padding: 1rem 0.5rem; }
+      .header-card { padding: 1.5rem; }
+      .header-title { font-size: 1.35rem; }
+      .card-header { padding: 1.25rem; }
+      .card-title { font-size: 1.05rem; }
+      .card-content { padding: 1.25rem; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .radar-chart-container { height: 350px; }
+      .controls-bar { flex-direction: column; align-items: stretch; }
+      .search-box { max-width: 100%; }
+      .sub-toggle-bar { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Header Institucional -->
+    <header class="header-card">
+      <div class="header-top">
+        <div class="header-title-group">
+          <div class="sena-badge">
+            <span></span> SENA CTA CARTAGO
+          </div>
+          <span class="pill-badge positive">Horizontes 2027</span>
+        </div>
+        <div class="pill-badge accent">
+          Comité Técnico de Centro (CTC)
+        </div>
+      </div>
+
+      <div>
+        <h1 class="header-title">Informe de Prospectiva y Pertinencia Territorial 2027</h1>
+        <p class="header-subtitle">Documento de consulta y concertación estratégica del Centro de Tecnologías Agroindustriales. Articula la visión misional del SENA con las demandas reales del sector productivo, trabajadores y comunidades del Norte del Valle.</p>
+      </div>
+    </header>
+
+    <!-- Barra de Búsqueda y Filtros de Estado Global -->
+    <section class="controls-bar">
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24">
+          <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Filtrar matriz (IA, Acueductos, Café, APE, Turismo, Residuos)...">
+      </div>
+
+      <div class="button-group">
+        <button id="btnExpandAll" class="btn-secondary">Expandir Todo</button>
+        <button id="btnCollapseAll" class="btn-secondary">Colapsar Todo</button>
+        <button class="btn-primary" onclick="window.print()">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          Exportar
+        </button>
+      </div>
+    </section>
+
+    <!-- Módulo Principal: 5 Cards en Modo Toggle (Colapsadas por defecto) -->
+    <main class="cards-grid">
+
+      <!-- ====================================================================
+           CARD 1: PORTAFOLIO DE SERVICIOS MISIONALES (ORDEN SOLICITADO)
+           ==================================================================== -->
+      <article class="toggle-card" id="cardPortafolio">
+        <header class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-number">01</div>
+            <div class="card-title-group">
+              <h2 class="card-title">Portafolio de Servicios Institucionales</h2>
+              <span class="card-subtitle">Marco oficial "Qué es" de los 6 servicios misionales para la articulación territorial.</span>
+            </div>
+          </div>
+          <div class="card-header-right">
+            <span class="pill-badge brand">Marco Misional</span>
+            <div class="toggle-icon">
+              <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+            </div>
+          </div>
+        </header>
+
+        <div class="card-body">
+          <div class="card-content">
+            <div class="portfolio-grid">
+
+              <!-- 1. FPI -->
+              <div class="portfolio-card">
+                <div class="portfolio-card-header">
+                  <h3 class="portfolio-card-title">1. FPI - Formación Profesional Integral</h3>
+                  <span class="pill-badge brand">Core Misional</span>
+                </div>
+                <p class="portfolio-card-body">Proceso educativo teórico-práctico del SENA orientado al desarrollo de conocimientos, habilidades, valores y actitudes para el trabajo y la vida. Abarca la educación Titulada (Tecnologías, Técnicos, Operarios, Auxiliares) y la Formación Complementaria, articuladas bajo el enfoque de formación por proyectos, competencias e innovación pedagógica.</p>
+                <div class="portfolio-card-footer">
+                  <span>Eje: Capital Humano</span>
+                  <span style="color:var(--brand-primary);">Titulada & Complementaria</span>
+                </div>
+              </div>
+
+              <!-- 2. SENNOVA -->
+              <div class="portfolio-card">
+                <div class="portfolio-card-header">
+                  <h3 class="portfolio-card-title">2. Investigación, Innovación y Desarrollo (SENNOVA)</h3>
+                  <span class="pill-badge brand">I+D+i</span>
+                </div>
+                <p class="portfolio-card-body">Sistema de Investigación, Desarrollo Tecnológico e Innovación del SENA que articula la formación con las demandas tecnológicas de los sectores productivos. Fomenta semilleros de investigación, transferencia de tecnología, soluciones ambientales, bioeconomía, economía circular y modernización productiva regional.</p>
+                <div class="portfolio-card-footer">
+                  <span>Eje: Transferencia Tech</span>
+                  <span style="color:var(--brand-primary);">Proyectos I+D+i</span>
+                </div>
+              </div>
+
+              <!-- 3. CCL -->
+              <div class="portfolio-card">
+                <div class="portfolio-card-header">
+                  <h3 class="portfolio-card-title">3. CCL - Normalización de Competencias Laborales</h3>
+                  <span class="pill-badge neutral">Estándares</span>
+                </div>
+                <p class="portfolio-card-body">Proceso institucional que estandariza las funciones productivas del talento humano mediante la elaboración y actualización de Normas de Competencia Laboral (NCL). Actúa en concertación con el sector empresarial, trabajadores y Mesas Sectoriales para definir los estándares de desempeño con calidad y pertinencia.</p>
+                <div class="portfolio-card-footer">
+                  <span>Eje: Estándares de Industria</span>
+                  <span style="color:var(--brand-primary);">Mesas Sectoriales</span>
+                </div>
+              </div>
+
+              <!-- 4. ECCL -->
+              <div class="portfolio-card">
+                <div class="portfolio-card-header">
+                  <h3 class="portfolio-card-title">4. ECCL - Evaluación y Certificación de Competencias</h3>
+                  <span class="pill-badge positive">Reconocimiento</span>
+                </div>
+                <p class="portfolio-card-body">Servicio gratuito mediante el cual el SENA evalúa y certifica el saber hacer, la experiencia y los conocimientos de las personas en un oficio u ocupación, independientemente de cómo y dónde los hayan adquirido. Impulsa la empleabilidad, la movilidad laboral e inclusión de trabajadores y emprendedores.</p>
+                <div class="portfolio-card-footer">
+                  <span>Eje: Inclusión Laboral</span>
+                  <span style="color:var(--brand-primary);">Talento Humano</span>
+                </div>
+              </div>
+
+              <!-- 5. Emprendimiento -->
+              <div class="portfolio-card">
+                <div class="portfolio-card-header">
+                  <h3 class="portfolio-card-title">5. Emprendimiento y Empresarismo</h3>
+                  <span class="pill-badge positive">Fondo Emprender</span>
+                </div>
+                <p class="portfolio-card-body">Servicio de asesoría, acompañamiento e incubación para la creación de empresas sostenibles y el fortalecimiento de Mipymes y unidades de iniciativas de emprendimiento. Mediante la Red Nacional de Emprendimiento y el Fondo Emprender, promueve la aceleración de iniciativas rurales, femeninas y comunitarias.</p>
+                <div class="portfolio-card-footer">
+                  <span>Eje: Iniciativas de Emprendimiento</span>
+                  <span style="color:var(--brand-primary);">SENA Emprende</span>
+                </div>
+              </div>
+
+              <!-- 6. APE -->
+              <div class="portfolio-card">
+                <div class="portfolio-card-header">
+                  <h3 class="portfolio-card-title">6. APE - Agencia Pública de Empleo y Relacionamiento</h3>
+                  <span class="pill-badge neutral">Intermediación</span>
+                </div>
+                <p class="portfolio-card-body">Plataforma pública e intermediaria de la intermediación laboral gratuita que conecta la oferta de talento humano calificado con las vacantes del sector empresarial. Gestiona el Contrato de Aprendizaje (SGVA), la orientación ocupacional y el portafolio corporativo integral para la vinculación laboral efectiva.</p>
+                <div class="portfolio-card-footer">
+                  <span>Eje: Inserción Laboral</span>
+                  <span style="color:var(--brand-primary);">SGVA & Vacantes</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ====================================================================
+           CARD 2: ENCUESTA COMITÉ DE CENTRO - MATRIZ INTEGRADORA 2027
+           ==================================================================== -->
+      <article class="toggle-card" id="cardEncuesta">
+        <header class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-number">02</div>
+            <div class="card-title-group">
+              <h2 class="card-title">Encuesta Comité de Centro (Matriz Integradora 2027)</h2>
+              <span class="card-subtitle">Sistematización prospectiva de requerimientos del entorno productivo, laboral y comunitario.</span>
+            </div>
+          </div>
+          <div class="card-header-right">
+            <span class="pill-badge positive">Consolidado 2027</span>
+            <div class="toggle-icon">
+              <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+            </div>
+          </div>
+        </header>
+
+        <div class="card-body">
+          <div class="card-content">
+
+            <!-- Gráfico Radar a Ancho Total (100%) -->
+            <div class="radar-full-box">
+              <h3 style="font-size:1.1rem; font-weight:700; color:var(--brand-primary); margin-bottom:0.25rem; text-align:center;">
+                Ejes Temáticos Solicitados por el Territorio
+              </h3>
+              <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.25rem; text-align:center;">
+                Gráfico de Relevancia Territorial (# de solicitudes coincidentes en el Comité de Centro)
+              </p>
+              <div class="radar-chart-container">
+                <canvas id="chartEjesRadarFull"></canvas>
+              </div>
+            </div>
+
+            <!-- Matriz Integradora por las 8 Categorías -->
+            <h3 style="font-size:1.05rem; font-weight:700; color:var(--brand-primary); margin-bottom:1rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+              <span>Matriz Integradora de Necesidades 2027 (8 Categorías Misionales)</span>
+              <span class="pill-badge neutral" style="font-size:0.75rem;" id="rowCountBadge">8 Categorías Filtradas</span>
+            </h3>
+
+            <div class="table-responsive">
+              <table class="matriz-table" id="matrizTable">
+                <thead>
+                  <tr>
+                    <th style="width: 25%;">Categoría Misional</th>
+                    <th style="width: 50%;">Consolidado de Requerimientos y Necesidades</th>
+                    <th style="width: 25%;">Sectores / Actores Solicitantes</th>
+                  </tr>
+                </thead>
+                <tbody id="matrizTableBody">
+                  
+                  <!-- 1. Normalización -->
+                  <tr>
+                    <td>
+                      <span class="cat-tag">1. Normalización (NCL)</span><br>
+                      <strong style="font-size:0.82rem; color:var(--text-secondary);">Elaboración y actualización</strong>
+                    </td>
+                    <td>
+                      • <strong>Café y Agroindustria:</strong> Comprador de café, vendedor de insumos agropecuarios, administrador de finca, asistentes técnicos de campo.<br>
+                      • <strong>Turismo y Comercio:</strong> Gestores de turismo, atención en parques, costeo y fijación de precios.<br>
+                      • <strong>Sostenibilidad:</strong> Clasificación de residuos y reciclaje, competencias científicas para jóvenes rurales.<br>
+                      • <strong>Transversales:</strong> Mercadeo, ventas y bilingüismo aplicados. <em>(Se reconoce actualización periódica existente)</em>.
+                    </td>
+                    <td>
+                      <div class="actors-tags">
+                        <span class="actor-chip">CAFICENTRO</span>
+                        <span class="actor-chip">FENALCO</span>
+                        <span class="actor-chip">ANUC</span>
+                        <span class="actor-chip">Comfenalco</span>
+                        <span class="actor-chip">Comercio Local</span>
+                        <span class="actor-chip">CUT</span>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- 2. ECCL -->
+                  <tr>
+                    <td>
+                      <span class="cat-tag">2. Certificación (ECCL)</span><br>
+                      <strong style="font-size:0.82rem; color:var(--text-secondary);">Evaluación del talento humano</strong>
+                    </td>
+                    <td>
+                      • <strong>Informales y Espacio Público:</strong> Vendedores autorizados en espacio público (presentación, atención, precios, turismo).<br>
+                      • <strong>Cadena del Café:</strong> Compradores de café, vendedores de insumos, asistentes técnicos de campo.<br>
+                      • <strong>Servicios y Turismo:</strong> Promotores turísticos, procesos contables, administrativos y manipulación de alimentos.<br>
+                      • <strong>Sector Rural:</strong> Evaluación continua teórico-práctica y fortalecimiento de competencias tecnológicas en el campo.
+                    </td>
+                    <td>
+                      <div class="actors-tags">
+                        <span class="actor-chip">CAFICENTRO</span>
+                        <span class="actor-chip">FENALCO</span>
+                        <span class="actor-chip">ANUC</span>
+                        <span class="actor-chip">Comfenalco</span>
+                        <span class="actor-chip">Comercio</span>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- 3. Formación FPI -->
+                  <tr>
+                    <td>
+                      <span class="cat-tag">3. Formación (FPI)</span><br>
+                      <strong style="font-size:0.82rem; color:var(--text-secondary);">Titulada y Complementaria</strong>
+                    </td>
+                    <td>
+                      • <strong>Agua y Acueductos:</strong> Gestión de acueductos comunitarios, catación y análisis de calidad del agua, manejo de redes e infraestructura (placa huella).<br>
+                      • <strong>IA y TICs:</strong> IA aplicada a procesos productivos/comerciales, manejo de redes, electrónica para jóvenes campesinos, sistemas de información.<br>
+                      • <strong>Turismo y Servicios:</strong> Guías turísticos regionales para el Norte del Valle, turismo sostenible, bilingüismo, deportes y agentes de comunicación.<br>
+                      • <strong>Gobernanza y Transversales:</strong> Habilidades blandas, cooperativismo aplicado, buen gobierno, SARLAFT, logística e innovación.
+                    </td>
+                    <td>
+                      <div class="actors-tags">
+                        <span class="actor-chip">CUT</span>
+                        <span class="actor-chip">CAFICENTRO</span>
+                        <span class="actor-chip">FENALCO</span>
+                        <span class="actor-chip">ANUC</span>
+                        <span class="actor-chip">Comfenalco</span>
+                        <span class="actor-chip">Multirepuestos</span>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- 4. Emprendimiento -->
+                  <tr>
+                    <td>
+                      <span class="cat-tag">4. Emprendimiento</span><br>
+                      <strong style="font-size:0.82rem; color:var(--text-secondary);">Acompañamiento Empresarial</strong>
+                    </td>
+                    <td>
+                      • <strong>Visitas Directas:</strong> Programación de cronograma de acompañamiento en campo para Mipymes y empresas existentes.<br>
+                      • <strong>Gestión Estratégica:</strong> Planeación estratégica, acceso a financiamiento, cooperativismo y alianzas público-privadas.<br>
+                      • <strong>Sectores prioritarios:</strong> Emprendimiento para mujeres campesinas, restaurantes, comercio local y prestadores turísticos (fortalecimiento de las iniciativas de emprendimiento y del sector rural).<br>
+                      • <strong>Apropiación Digital:</strong> IA aplicada al mercadeo, SIAR y modelos de comercialización digital.
+                    </td>
+                    <td>
+                      <div class="actors-tags">
+                        <span class="actor-chip">CUT</span>
+                        <span class="actor-chip">CAFICENTRO</span>
+                        <span class="actor-chip">ANUC</span>
+                        <span class="actor-chip">Comfenalco</span>
+                        <span class="actor-chip">Comercio Local</span>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- 5. SENNOVA -->
+                  <tr>
+                    <td>
+                      <span class="cat-tag">5. Innovación (SENNOVA)</span><br>
+                      <strong style="font-size:0.82rem; color:var(--text-secondary);">I+D+i y Transferencia</strong>
+                    </td>
+                    <td>
+                      • <strong>Sostenibilidad Ambiental:</strong> Proyectos en cambio climático, compostaje, manejo de residuos y bio-transformación en restaurantes/comercios.<br>
+                      • <strong>Ciencia y Juventud Rural:</strong> Investigación científica y tecnológica aplicada a jóvenes campesinos de acuerdo con su entorno familiar/regional.<br>
+                      • <strong>Soluciones Tecnológicas:</strong> Desarrollo de Apps para ventas, logística comercial y plataformas de comercialización.<br>
+                      • <strong>Trabajo Colaborativo:</strong> Nuevos espacios de articulación para proyectos de transferencia tecnológica con el sector productivo.
+                    </td>
+                    <td>
+                      <div class="actors-tags">
+                        <span class="actor-chip">CUT</span>
+                        <span class="actor-chip">CAFICENTRO</span>
+                        <span class="actor-chip">FENALCO</span>
+                        <span class="actor-chip">ANUC</span>
+                        <span class="actor-chip">Comfenalco</span>
+                        <span class="actor-chip">Comercio</span>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- 6. APE -->
+                  <tr>
+                    <td>
+                      <span class="cat-tag">6. Agencia Empleo (APE)</span><br>
+                      <strong style="font-size:0.82rem; color:var(--text-secondary);">Intermediación Laboral</strong>
+                    </td>
+                    <td>
+                      • <strong>Perfiles Solicitados:</strong> Compradores de café, vendedores de insumos agropecuarios, auxiliares contables, asistentes técnicos de campo, conductores de carga, guardas de seguridad, agentes de atención.<br>
+                      • <strong>Acceso y Plataforma:</strong> Estrategias para atraer usuarios a la APE, facilitar el acceso a la plataforma y posicionar la APE ante empresarios como aliado principal en selección.
+                    </td>
+                    <td>
+                      <div class="actors-tags">
+                        <span class="actor-chip">CAFICENTRO</span>
+                        <span class="actor-chip">CUT</span>
+                        <span class="actor-chip">FENALCO</span>
+                        <span class="actor-chip">ANUC</span>
+                        <span class="actor-chip">Comfenalco</span>
+                        <span class="actor-chip">Comercio</span>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- 7. Relacionamiento -->
+                  <tr>
+                    <td>
+                      <span class="cat-tag">7. Relacionamiento Corporativo</span><br>
+                      <strong style="font-size:0.82rem; color:var(--text-secondary);">Contrato de Aprendizaje & SGVA</strong>
+                    </td>
+                    <td>
+                      • <strong>Depuración SGVA:</strong> Actualización urgente de disponibilidad de aprendices y datos de contacto (teléfonos) para evitar citaciones desfasadas.<br>
+                      • <strong>Cultura de Respuesta:</strong> Capacitar aprendices en la postulación por plataforma SGVA y la atención oportuna a citaciones.<br>
+                      • <strong>Socialización de Portafolio:</strong> Fortalecer visitas a empresas para difundir beneficios del SENA y ofertas de articulación.<br>
+                      • <strong>Áreas Prioritarias:</strong> Medios digitales, archivo, logística y comercialización.
+                    </td>
+                    <td>
+                      <div class="actors-tags">
+                        <span class="actor-chip">CAFICENTRO</span>
+                        <span class="actor-chip">CUT</span>
+                        <span class="actor-chip">FENALCO</span>
+                        <span class="actor-chip">ANUC</span>
+                        <span class="actor-chip">Comfenalco</span>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- 8. Necesidades Adicionales -->
+                  <tr>
+                    <td>
+                      <span class="cat-tag">8. Necesidades Adicionales</span><br>
+                      <strong style="font-size:0.82rem; color:var(--text-secondary);">Gobernanza y Sostenibilidad</strong>
+                    </td>
+                    <td>
+                      • <strong>Coordinación Interinstitucional:</strong> Fortalecer la articulación continua entre el SENA, alcaldías, gremios y organizaciones.<br>
+                      • <strong>Recursos Insumos:</strong> Suministro oportuno de materiales de formación en el sector rural.<br>
+                      • <strong>Instructores Locales:</strong> Priorizar la contratación de tutores pertenecientes a la región para afianzar la pertinencia.<br>
+                      • <strong>Divulgación Abierta:</strong> Ampliar la transmisión del portafolio en escenarios regionales.
+                    </td>
+                    <td>
+                      <div class="actors-tags">
+                        <span class="actor-chip">CAFICENTRO</span>
+                        <span class="actor-chip">CUT</span>
+                        <span class="actor-chip">FENALCO</span>
+                        <span class="actor-chip">ANUC</span>
+                      </div>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </article>
+
+      <!-- ====================================================================
+           CARD 3: ALINEACIÓN ESTRATÉGICA DIOS, DOFA Y ESTRATEGIAS EMERGENTES
+           ==================================================================== -->
+      <article class="toggle-card" id="cardDios">
+        <header class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-number">03</div>
+            <div class="card-title-group">
+              <h2 class="card-title">Alineación Estratégica DIOS, DOFA y Desafíos CTA</h2>
+              <span class="card-subtitle">Estrategia de la Dirección General, diagnóstico de retos y matriz de estrategias emergentes.</span>
+            </div>
+          </div>
+          <div class="card-header-right">
+            <span class="pill-badge brand">Dirección General</span>
+            <div class="toggle-icon">
+              <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+            </div>
+          </div>
+        </header>
+
+        <div class="card-body">
+          <div class="card-content">
+            
+            <!-- Barra con 3 Toggle Buttons Sub-Navegación -->
+            <nav class="sub-toggle-bar">
+              <button class="sub-toggle-btn active" onclick="switchSubPanel('panelDios', this)">
+                [a] Estrategia DIOS
+              </button>
+              <button class="sub-toggle-btn" onclick="switchSubPanel('panelDofa', this)">
+                [b] Matriz DOFA CTA
+              </button>
+              <button class="sub-toggle-btn" onclick="switchSubPanel('panelEmergentes', this)">
+                [c] Estrategias Emergentes
+              </button>
+            </nav>
+
+            <!-- SUB-PANEL [a]: EXPLICACIÓN DE LA ESTRATEGIA DIOS DE LA DIRECCIÓN GENERAL -->
+            <div id="panelDios" class="sub-content-panel active">
+              <div style="background:#F8FAFC; border:1px solid var(--border-default); border-radius:16px; padding:1.5rem; margin-bottom:1.25rem;">
+                <h3 style="font-size:1.1rem; font-weight:800; color:var(--brand-primary); margin-bottom:0.5rem;">
+                  Estrategia "DIOS" - Dirección General SENA
+                </h3>
+                <p style="font-size:0.9rem; color:var(--text-secondary); line-height:1.6;">
+                  Liderada por la Dirección General (Fray Ricardo Torres Castro), la estrategia <strong>DIOS</strong> constituye la hoja de ruta institucional de transformación para posicionar al SENA como motor de desarrollo económico, equidad social y convergencia tecnológica en Colombia. Se articula en 4 pilares fundamentales:
+                </p>
+              </div>
+
+              <div class="info-grid">
+                <div class="info-box">
+                  <h4>D — Digitalización</h4>
+                  <p>Incorporación de Inteligencia Artificial (IA) en guías de aprendizaje, automatización de la plataforma APE/SGVA, modernización de laboratorios e infraestructura de conectividad en sedes rurales del Norte del Valle.</p>
+                </div>
+
+                <div class="info-box accent">
+                  <h4>I — Innovación</h4>
+                  <p>Evolución hacia metodologías ágiles, fortalecimiento de proyectos I+D+i en SENNOVA integrados directamente al aula de clase y transferencia tecnológica activa a las iniciativas de emprendimiento y comunidades campesinas.</p>
+                </div>
+
+                <div class="info-box">
+                  <h4>O — Oportunidades</h4>
+                  <p>Sincronización de la oferta formativa con la vocación turística, agrícola y de software. Impulso a la marca región, intermediación laboral mediante la APE y alianzas gremiales para etapa productiva.</p>
+                </div>
+
+                <div class="info-box accent">
+                  <h4>S — Sostenibilidad</h4>
+                  <p>Transición ecológica en sedes físicas, proyectos en compostaje, bioeconomía, gestión integral del agua y apoyo a emprendimientos femeninos y rurales de base sostenible.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- SUB-PANEL [b]: MATRIZ DOFA A PARTIR DE RETOS IDENTIFICADOS -->
+            <div id="panelDofa" class="sub-content-panel">
+              <div style="background:#F8FAFC; border:1px solid var(--border-default); border-radius:16px; padding:1.25rem; margin-bottom:1.25rem;">
+                <h3 style="font-size:1.05rem; font-weight:800; color:var(--brand-primary);">
+                  Diagnóstico Situacional (DOFA) - Centro de Tecnologías Agroindustriales
+                </h3>
+                <p style="font-size:0.85rem; color:var(--text-secondary);">
+                  Análisis consolidado a partir de la visión compartida interna y los requerimientos del Comité Técnico de Centro (CTC).
+                </p>
+              </div>
+
+              <div class="dofa-grid">
+                <!-- Fortalezas -->
+                <div class="dofa-box fortal">
+                  <h4 style="color:var(--brand-primary);">
+                    FORTALEZAS (F)
+                    <span class="pill-badge positive" style="font-size:0.65rem;">Internas</span>
+                  </h4>
+                  <ul>
+                    <li>Capacidad instalada e infraestructura especializada en el Norte del Valle.</li>
+                    <li>Capacidades de I+D+i reconocidas en el sistema SENNOVA.</li>
+                    <li>Oferta diversa en formación agroindustrial, comercial y tecnológica.</li>
+                    <li>Arraigo institucional y posicionamiento de la marca SENA en la subregión.</li>
+                  </ul>
+                </div>
+
+                <!-- Oportunidades -->
+                <div class="dofa-box oport">
+                  <h4 style="color:var(--brand-primary);">
+                    OPORTUNIDADES (O)
+                    <span class="pill-badge accent" style="font-size:0.65rem;">Entorno</span>
+                  </h4>
+                  <ul>
+                    <li>Alta demanda de IA aplicada, comercio digital y TICs por parte de empresarios.</li>
+                    <li>Articulación con gremios líderes (CAFICENTRO, FENALCO, CUT, ANUC, Comfenalco).</li>
+                    <li>Proyectos de bioeconomía, cambio climático y gestión de acueductos comunitarios.</li>
+                    <li>Potencial de desarrollo turístico regional en el Norte del Valle.</li>
+                  </ul>
+                </div>
+
+                <!-- Debilidades -->
+                <div class="dofa-box debil">
+                  <h4 style="color:#D97706;">
+                    DEBILIDADES (D)
+                    <span class="pill-badge neutral" style="font-size:0.65rem;">Internas</span>
+                  </h4>
+                  <ul>
+                    <li>Desfase e inconsistencia de datos telefónicos de aprendices en plataforma SGVA/APE.</li>
+                    <li>Aislamiento de la investigación SENNOVA respecto a la base de formación en aula.</li>
+                    <li>Trámites normativos y administrativos rígidos que restan agilidad de respuesta.</li>
+                    <li>Canales de comunicación informales y fragmentados entre coordinaciones.</li>
+                  </ul>
+                </div>
+
+                <!-- Amenazas -->
+                <div class="dofa-box amena">
+                  <h4 style="color:var(--brand-accent-red);">
+                    AMENAZAS (A)
+                    <span class="pill-badge negative" style="font-size:0.65rem;">Entorno</span>
+                  </h4>
+                  <ul>
+                    <li>Deserción de jóvenes campesinos y migración hacia zonas urbanas.</li>
+                    <li>Falta de respuesta o desinterés de aprendices citados a ofertas laborales/contrato.</li>
+                    <li>Cambio climático que afecta directamente las cosechas y la cadena del café.</li>
+                    <li>Insuficiencia de insumos de formación oportunos en territorio rural.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- SUB-PANEL [c]: ESTRATEGIAS EMERGENTES CROSSTARGET (FO, DO, FA, DA) -->
+            <div id="panelEmergentes" class="sub-content-panel">
+              <div style="background:#F8FAFC; border:1px solid var(--border-default); border-radius:16px; padding:1.25rem; margin-bottom:1.25rem;">
+                <h3 style="font-size:1.05rem; font-weight:800; color:var(--brand-primary);">
+                  Estrategias Emergentes Crosstarget (Matriz de Impacto 2027)
+                </h3>
+                <p style="font-size:0.85rem; color:var(--text-secondary);">
+                  Cruce sistemático para orientar las acciones del Plan de Acción del CTA Cartago.
+                </p>
+              </div>
+
+              <div class="info-grid">
+                <!-- FO -->
+                <div class="info-box accent">
+                  <h4 style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>Proactivas (FO: Fortalezas + Oportunidades)</span>
+                    <span class="pill-badge positive" style="font-size:0.65rem;">Estratégicas</span>
+                  </h4>
+                  <p><strong>• Hub de IA y Tecnología Rural:</strong> Aprovechar la capacidad instalada de SENNOVA y laboratorios para desplegar formación masiva en IA aplicada, comercio electrónico y Apps de ventas junto a FENALCO y CAFICENTRO.<br>
+                  <strong>• Escuela Agroambiental del Agua:</strong> Desarrollar programas de gestión de acueductos comunitarios y catación de agua uniendo la experiencia técnica del CTA con las solicitudes de la CUT y comunidades rurales.</p>
+                </div>
+
+                <!-- DO -->
+                <div class="info-box warning">
+                  <h4 style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>Adaptativas (DO: Debilidades + Oportunidades)</span>
+                    <span class="pill-badge neutral" style="font-size:0.65rem;">Ajuste Interno</span>
+                  </h4>
+                  <p><strong>• Depuración y Cultura APE/SGVA:</strong> Implementar un protocolo de actualización mensual de datos telefónicos de aprendices mediante un taller obligatorio en inducción para aprovechar la alta demanda de vacantes empresariales.<br>
+                  <strong>• Cronograma Integrado de Visitas:</strong> Superar el trabajo en islas organizando salidas de campo unificadas (APE + Emprendimiento + SENNOVA) para llevar el portafolio a Mipymes y asociaciones.</p>
+                </div>
+
+                <!-- FA -->
+                <div class="info-box">
+                  <h4 style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>Mitigación (FA: Fortalezas + Amenazas)</span>
+                    <span class="pill-badge brand" style="font-size:0.65rem;">Protección</span>
+                  </h4>
+                  <p><strong>• Jóvenes Rurales Technified (ANUC):</strong> Desplegar formación técnica adaptada con tutores locales e insumos a tiempo para desincentivar la migración juvenil campesina.<br>
+                  <strong>• Resiliencia Agroclimática:</strong> Aplicar investigaciones de SENNOVA en compostaje, bio-transformación de residuos y siembra eficiente frente a los efectos del cambio climático en el café.</p>
+                </div>
+
+                <!-- DA -->
+                <div class="info-box red">
+                  <h4 style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>Sostenibilidad / Defensivas (DA: Debilidades + Amenazas)</span>
+                    <span class="pill-badge negative" style="font-size:0.65rem;">Supervivencia</span>
+                  </h4>
+                  <p><strong>• Sistema Alerta Temprana de Deserción:</strong> Vincular el Seguimiento a Etapa Productiva con la APE para detectar a tiempo aprendices desconectados antes de perder el patrocinio o el empleo.<br>
+                  <strong>• Gobernanza de Materiales en Territorio:</strong> Crear mesas trimestrales con el CTC para coordinar la logística y distribución transparente de insumos agrícolas y pedagógicos.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </article>
+
+      <!-- ====================================================================
+           CARD 4: PLAN DE FLUJOS E INTEGRACIÓN INTERÁREAS
+           ==================================================================== -->
+      <article class="toggle-card" id="cardFlujos">
+        <header class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-number">04</div>
+            <div class="card-title-group">
+              <h2 class="card-title">Convergencia Venn & Plan Tecnológico 2020-2030</h2>
+              <span class="card-subtitle">Alineación estratégica entre Demandas CTC, Visión DIOS y Tendencias Tecnológicas Institucionales.</span>
+            </div>
+          </div>
+          <div class="card-header-right">
+            <span class="pill-badge positive">Plan Tecnológico SENA</span>
+            <div class="toggle-icon">
+              <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+            </div>
+          </div>
+        </header>
+
+        <div class="card-body">
+          <div class="card-content">
+            
+            <div class="venn-container">
+              <h3 style="font-size:1.1rem; font-weight:800; color:var(--brand-primary); margin-bottom:0.25rem; text-align:center;">
+                Diagrama de Convergencia Tridimensional
+              </h3>
+              <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.5rem; text-align:center;">
+                Intersección entre Demandas Territoriales (CTC) + Visión Directiva DIOS + Estrategias Emergentes
+              </p>
+
+              <canvas id="vennCanvas" width="750" height="450"></canvas>
+            </div>
+
+            <!-- Estructura de Direccionadores y Tendencias Tecnológicas -->
+            <h3 style="font-size:1.05rem; font-weight:800; color:var(--brand-primary); margin-top:1rem; margin-bottom:1.25rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+              <span>Alineación con Direccionadores y Tendencias Tecnológicas SENA</span>
+              <span class="pill-badge brand">Marco Institucional</span>
+            </h3>
+
+            <div class="plan-tech-grid">
+              
+              <!-- Direccionador 1: Desarrollo Social y Comunitario -->
+              <div class="direccionador-card">
+                <div class="direccionador-header">
+                  <h4 class="direccionador-title">DESARROLLO SOCIAL Y COMUNITARIO</h4>
+                  <span class="pill-badge positive" style="font-size:0.65rem;">Direccionador 1</span>
+                </div>
+                <ul class="tendencias-list">
+                  <li class="tendencias-item">
+                    <strong>Desarrollo Turístico Sostenible y Participación Socioeconómica:</strong> Guías turísticos regionales, dinamización de espacios públicos y gestión comunitaria.
+                  </li>
+                  <li class="tendencias-item">
+                    <strong>Sociotecnología y Ciudades Inteligentes:</strong> Redes de comunicación, soluciones técnicas e infraestructura comunitaria para acueductos rurales.
+                  </li>
+                  <li class="tendencias-item">
+                    <strong>Administración del Conocimiento y Modelos para Mercados Electrónicos:</strong> Cooperativismo, gobernanza y canales digitales para la comercialización campesina.
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Direccionador 2: Economía Creativa -->
+              <div class="direccionador-card">
+                <div class="direccionador-header">
+                  <h4 class="direccionador-title">ECONOMÍA CREATIVA</h4>
+                  <span class="pill-badge brand" style="font-size:0.65rem;">Direccionador 2</span>
+                </div>
+                <ul class="tendencias-list">
+                  <li class="tendencias-item">
+                    <strong>Audiencias Interactivas e Inteligencia Artificial:</strong> Formación en IA aplicada, creación de contenido, mercadeo y posicionamiento de marcas locales.
+                  </li>
+                  <li class="tendencias-item">
+                    <strong>IA, Competencias Digitales y Smart Spaces:</strong> Electrónica para jóvenes rurales, modernización de ambientes formativos y herramientas digitales.
+                  </li>
+                  <li class="tendencias-item">
+                    <strong>Teletrabajo, Gestión de la Información y Automatización de Procesos:</strong> Aplicación de software, control de calidad e intermediación APE/SGVA eficiente.
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Direccionador 3: Biocomercio -->
+              <div class="direccionador-card">
+                <div class="direccionador-header">
+                  <h4 class="direccionador-title">BIOCOMERCIO</h4>
+                  <span class="pill-badge accent" style="font-size:0.65rem;">Direccionador 3</span>
+                </div>
+                <ul class="tendencias-list">
+                  <li class="tendencias-item">
+                    <strong>Innovación en Procesos y Productos Alimenticios:</strong> Asistencia técnica agropecuaria, buenas prácticas en café y agregación de valor en origen.
+                  </li>
+                  <li class="tendencias-item">
+                    <strong>Certificaciones Verdes, Economía Circular y Bienestar Ocupacional:</strong> Compostaje, gestión de residuos en comercios/restaurantes y normas SARLAFT.
+                  </li>
+                  <li class="tendencias-item">
+                    <strong>Ecosistemas Think Tech, Omnicanalidad y Huella de Carbono:</strong> Apps de ventas directas, trazabilidad ambiental y logística verde para la subregión.
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </article>
+
+      <!-- ====================================================================
+           CARD 5: RECONOCIMIENTO Y AGRADECIMIENTO AL COMITÉ TÉCNICO
+           ==================================================================== -->
+      <article class="toggle-card" id="cardGracias">
+        <header class="card-header" onclick="toggleCard(this)">
+          <div class="card-header-left">
+            <div class="card-number">05</div>
+            <div class="card-title-group">
+              <h2 class="card-title">Reconocimiento y Agradecimiento al Comité Técnico</h2>
+              <span class="card-subtitle">Construcción colectiva de un centro de formación moderno, innovador, pertinente y sostenible.</span>
+            </div>
+          </div>
+          <div class="card-header-right">
+            <span class="pill-badge positive">Gobernanza Concertada</span>
+            <div class="toggle-icon">
+              <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+            </div>
+          </div>
+        </header>
+
+        <div class="card-body">
+          <div class="card-content">
+            
+            <div class="thanks-banner">
+              <div class="pill-badge positive" style="font-size:0.85rem; padding:6px 16px;">
+                ¡Agradecimiento Institucional!
+              </div>
+
+              <h2 class="thanks-title">Gratitud al Comité Técnico de Centro (CTC 2027)</h2>
+
+              <p class="thanks-desc">
+                La Subdirección, el equipo pedagógico y la comunidad formativa del <strong>Centro de Tecnologías Agroindustriales (CTAI) Cartago</strong> expresan su más sincero reconocimiento a cada uno de los integrantes del Comité Técnico de Centro.
+                <br><br>
+                Sus aportes, visión territorial y requerimientos consolidados son la brújula que guiará nuestro Plan de Acción 2027. Gracias a su compromiso activo, edificamos juntos un centro de formación profesional integral que es:
+              </p>
+
+              <div class="thanks-pills">
+                <span class="pill-badge brand" style="font-size:0.85rem; padding:8px 16px;">
+                  ✨ Moderno (Convergencia Digital e IA)
+                </span>
+                <span class="pill-badge positive" style="font-size:0.85rem; padding:8px 16px;">
+                  💡 Innovador (SENNOVA + I+D+i en Aula)
+                </span>
+                <span class="pill-badge accent" style="font-size:0.85rem; padding:8px 16px;">
+                  🎯 Pertinente (Sincronizado con el Territorio)
+                </span>
+                <span class="pill-badge neutral" style="font-size:0.85rem; padding:8px 16px;">
+                  🌱 Sostenible (Agua, Bioeconomía & Futuro)
+                </span>
+              </div>
+
+              <div style="margin-top:1.5rem; border-top:1px dashed var(--border-input); padding-top:1.25rem; width:100%; max-width:800px; display:flex; justify-content:space-around; flex-wrap:wrap; gap:1rem; font-size:0.85rem; color:var(--text-secondary); font-weight:700;">
+                <span>• CAFICENTRO</span>
+                <span>• CUT Valle</span>
+                <span>• FENALCO Cartago</span>
+                <span>• ANUC</span>
+                <span>• Comfenalco Valle</span>
+                <span>• Comercio Mipyme</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </article>
+
+    </main>
+
+  </div>
+
+  <!-- Vanilla JS Engine -->
+  <script>
+    // Configuración Inicial: TODAS las Cards Colapsadas por defecto
+    document.addEventListener('DOMContentLoaded', function() {
+      // Garantizar que ninguna card tenga la clase 'active' al iniciar
+      document.querySelectorAll('.toggle-card').forEach(card => {
+        card.classList.remove('active');
+      });
+
+      // Inicializar gráficos
+      initRadarChart();
+      initVennCanvas();
+    });
+
+    // Función Toggle Individual de Cards Principales
+    function toggleCard(headerElement) {
+      const card = headerElement.closest('.toggle-card');
+      card.classList.toggle('active');
+
+      // Redibujar Canvas si se despliega Card 4
+      if (card.id === 'cardFlujos' && card.classList.contains('active')) {
+        setTimeout(initVennCanvas, 150);
+      }
+    }
+
+    // Función Sub-Navegación Interactiva para Card 3
+    function switchSubPanel(panelId, btnElement) {
+      const buttons = btnElement.parentElement.querySelectorAll('.sub-toggle-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      const cardBody = btnElement.closest('.card-body');
+      const panels = cardBody.querySelectorAll('.sub-content-panel');
+      panels.forEach(panel => panel.classList.remove('active'));
+
+      btnElement.classList.add('active');
+      const targetPanel = document.getElementById(panelId);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+      }
+    }
+
+    // Botones de Control Global (Expandir / Colapsar Todo)
+    document.getElementById('btnExpandAll').addEventListener('click', () => {
+      document.querySelectorAll('.toggle-card').forEach(card => card.classList.add('active'));
+      setTimeout(initVennCanvas, 200);
+    });
+
+    document.getElementById('btnCollapseAll').addEventListener('click', () => {
+      document.querySelectorAll('.toggle-card').forEach(card => card.classList.remove('active'));
+    });
+
+    // Buscador en Tiempo Real para la Matriz (Card 2)
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+      const query = e.target.value.toLowerCase().trim();
+      const rows = document.querySelectorAll('#matrizTableBody tr');
+      let visibleCount = 0;
+
+      if (query.length > 0) {
+        document.getElementById('cardEncuesta').classList.add('active');
+      }
+
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(query)) {
+          row.style.display = '';
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      document.getElementById('rowCountBadge').innerText = `${visibleCount} Categorías Filtradas`;
+    });
+
+    // Radar Chart Card 2
+    function initRadarChart() {
+      const ctxRadar = document.getElementById('chartEjesRadarFull').getContext('2d');
+      
+      new Chart(ctxRadar, {
+        type: 'radar',
+        data: {
+          labels: [
+            'IA y TICs (6)', 
+            'Agua y Acueductos (5)', 
+            'Comercio y Ventas (5)', 
+            'Turismo Sostenible (4)', 
+            'Habilidades Blandas / Gobernanza (5)', 
+            'Agroindustria Campesina (4)', 
+            'Economía Circular / Residuos (4)'
+          ],
+          datasets: [{
+            label: 'Relevancia Territorial (# Solicitudes CTC)',
+            data: [6, 5, 5, 4, 5, 4, 4],
+            backgroundColor: 'rgba(0, 200, 83, 0.25)',
+            borderColor: '#00C853',
+            borderWidth: 2.5,
+            pointBackgroundColor: '#0A3D28',
+            pointBorderColor: '#FFFFFF',
+            pointBorderWidth: 2,
+            pointRadius: 6,
+            pointHoverRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: { color: '#1E293B', font: { family: 'Inter', size: 13, weight: '600' } }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return ` Relevancia Territorial: ${context.raw} / 6 Integrantes CTC`;
+                }
+              }
+            }
+          },
+          scales: {
+            r: {
+              angleLines: { color: '#E2E8F0', strokeWidth: 1.5 },
+              grid: { color: '#CBD5E1' },
+              suggestedMin: 0,
+              suggestedMax: 6,
+              ticks: { stepSize: 1, color: '#64748B', font: { family: 'Inter', size: 11 }, backdropColor: 'transparent' },
+              pointLabels: { color: '#1E293B', font: { family: 'Inter', size: 12, weight: '700' } }
+            }
+          }
+        }
+      });
+    }
+
+    // Renderizado del Diagrama de Venn Dinámico (Card 4)
+    function initVennCanvas() {
+      const canvas = document.getElementById('vennCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const width = canvas.width;
+      const height = canvas.height;
+      const radius = 135;
+
+      // Centros de los 3 Círculos
+      const c1 = { x: width / 2 - 80, y: height / 2 - 40 }; // Demandas Territoriales CTC
+      const c2 = { x: width / 2 + 80, y: height / 2 - 40 }; // Estrategia DIOS
+      const c3 = { x: width / 2, y: height / 2 + 75 };     // Estrategias Emergentes
+
+      ctx.globalAlpha = 0.55;
+
+      // Círculo 1: Demandas CTC (#0A3D28)
+      ctx.beginPath();
+      ctx.arc(c1.x, c1.y, radius, 0, Math.PI * 2);
+      ctx.fillStyle = '#0A3D28';
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#06291B';
+      ctx.stroke();
+
+      // Círculo 2: Estrategia DIOS (#00C853)
+      ctx.beginPath();
+      ctx.arc(c2.x, c2.y, radius, 0, Math.PI * 2);
+      ctx.fillStyle = '#00C853';
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#009624';
+      ctx.stroke();
+
+      // Círculo 3: Estrategias Emergentes (#55E063)
+      ctx.beginPath();
+      ctx.arc(c3.x, c3.y, radius, 0, Math.PI * 2);
+      ctx.fillStyle = '#55E063';
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#00C853';
+      ctx.stroke();
+
+      // Textos
+      ctx.globalAlpha = 1.0;
+      ctx.font = 'bold 13px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      
+      // Círculo 1 (CTC)
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText('Encuesta CTC', c1.x - 50, c1.y - 45);
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText('(Demandas del Territorio)', c1.x - 50, c1.y - 30);
+
+      // Círculo 2 (DIOS)
+      ctx.font = 'bold 13px Inter, sans-serif';
+      ctx.fillStyle = '#0A3D28';
+      ctx.fillText('Estrategia DIOS', c2.x + 50, c2.y - 45);
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText('(Dirección General)', c2.x + 50, c2.y - 30);
+
+      // Círculo 3 (Emergentes)
+      ctx.font = 'bold 13px Inter, sans-serif';
+      ctx.fillStyle = '#0A3D28';
+      ctx.fillText('Estrategias Emergentes', c3.x, c3.y + 75);
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText('(Cruces FO-DO-FA-DA)', c3.x, c3.y + 90);
+
+      // Intersecciones Dobles: Direccionadores del Plan Tecnológico
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillStyle = '#FFFFFF';
+      
+      // Intersección C1 y C2 -> Desarrollo Social
+      ctx.fillText('Desarrollo Social', width / 2, c1.y - 35);
+      ctx.font = '9px Inter, sans-serif';
+      ctx.fillText('& Comunitario', width / 2, c1.y - 22);
+
+      // Intersección C1 y C3 -> Biocomercio
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillStyle = '#0A3D28';
+      ctx.fillText('Biocomercio', c1.x + 15, c3.y - 20);
+
+      // Intersección C2 y C3 -> Economía Creativa
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillStyle = '#0A3D28';
+      ctx.fillText('Economía Creativa', c2.x - 15, c3.y - 20);
+
+      // Badge Central de la Intersección Tripartita
+      const centerX = width / 2;
+      const centerY = height / 2 + 5;
+
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+      ctx.beginPath();
+      ctx.roundRect(centerX - 110, centerY - 32, 220, 64, 12);
+      ctx.fill();
+      ctx.strokeStyle = '#0A3D28';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      ctx.fillStyle = '#0A3D28';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText('CONVERGENCIA PLAN TECNOLÓGICO', centerX, centerY - 14);
+      ctx.font = '9px Inter, sans-serif';
+      ctx.fillStyle = '#475569';
+      ctx.fillText('• Turismos Sostenible & Acueductos', centerX, centerY + 0);
+      ctx.fillText('• IA, Smart Spaces & Automatización', centerX, centerY + 12);
+      ctx.fillText('• Generación Verde & Circularidad', centerX, centerY + 24);
+    }
+  </script>
+</body>
+</html>
